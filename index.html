@@ -100,6 +100,40 @@
       color: #ffcc4d;
       font-weight: bold;
     }
+
+      .rank {
+    display: inline-block;
+    padding: 8px 14px;
+    margin: 10px 0 8px;
+    border-radius: 999px;
+    background: rgba(255, 204, 77, 0.14);
+    color: #ffcc4d;
+    font-weight: bold;
+    font-size: 15px;
+    }
+
+    .progressWrap {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 4px auto 6px;
+    }
+
+    .progressBar {
+      width: 0%;
+      height: 100%;
+      background: #ffcc4d;
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    .progressText {
+      font-size: 13px;
+      opacity: 0.75;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 
@@ -110,6 +144,15 @@
 
     <div class="money" id="money">0 ₽</div>
     <div class="income" id="income">+0 ₽/сек · +1 ₽/клик</div>
+    <div class="rank" id="rankText">Бомж района</div>
+
+    <div class="progressWrap">
+      <div class="progressBar" id="progressBar"></div>
+    </div>
+
+    <div class="progressText" id="progressText">
+      До уровня “Сборщик мелочи”: 100 ₽
+    </div>
 
     <div class="character" id="clickButton">🥴</div>
 
@@ -141,7 +184,7 @@
       </button>
 
       <p class="small">
-        v0.2 — район уже в Telegram. Дальше добавим уровни, задания и рейтинг.
+        Район ждёт легенду. Дальше будут задания, рейтинг и кланы.
       </p>
     </div>
   </div>
@@ -178,8 +221,20 @@
 
     let state = loadGame();
 
+    const ranks = [
+      { title: "Бомж района", need: 0 },
+      { title: "Сборщик мелочи", need: 100 },
+      { title: "Шаурма-стажёр", need: 500 },
+      { title: "Дворовый бизнесмен", need: 2_000 },
+      { title: "Шаурма-магнат", need: 10_000 },
+      { title: "Олигарх района", need: 50_000 },
+      { title: "Легенда района", need: 250_000 }
+    ];  
     const moneyEl = document.getElementById("money");
     const incomeEl = document.getElementById("income");
+    const rankText = document.getElementById("rankText");
+    const progressBar = document.getElementById("progressBar");
+    const progressText = document.getElementById("progressText");
     const clickButton = document.getElementById("clickButton");
     const upgradeClick = document.getElementById("upgradeClick");
     const upgradeAuto = document.getElementById("upgradeAuto");
@@ -213,6 +268,49 @@
       if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + " млн ₽";
       if (value >= 1_000) return (value / 1_000).toFixed(1) + " тыс ₽";
       return Math.floor(value) + " ₽";
+    }
+
+    function getCurrentRank() {
+      let currentRank = ranks[0];
+
+      for (const rank of ranks) {
+        if (state.money >= rank.need) {
+          currentRank = rank;
+        }
+      }
+
+      return currentRank;
+    }
+
+    function getNextRank() {
+      for (const rank of ranks) {
+        if (state.money < rank.need) {
+          return rank;
+        }
+      }
+
+      return null;
+    }
+
+    function updateRankUI() {
+      const currentRank = getCurrentRank();
+      const nextRank = getNextRank();
+
+      rankText.textContent = currentRank.title;
+
+      if (!nextRank) {
+        progressBar.style.width = "100%";
+        progressText.textContent = "Максимальный уровень района достигнут";
+        return;
+      }
+
+      const currentNeed = currentRank.need;
+      const nextNeed = nextRank.need;
+      const progress = ((state.money - currentNeed) / (nextNeed - currentNeed)) * 100;
+      const safeProgress = Math.max(0, Math.min(100, progress));
+
+      progressBar.style.width = `${safeProgress}%`;
+      progressText.textContent = `До уровня “${nextRank.title}”: ${formatMoney(nextNeed - state.money)}`;
     }
 
     function applyOfflineProgress() {
@@ -278,6 +376,7 @@
       dailyButton.textContent = dailyReady
         ? "Забрать ежедневный бонус"
         : "Ежедневный бонус уже забран";
+      updateRankUI();
       saveGame();
     }
 
