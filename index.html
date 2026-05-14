@@ -128,6 +128,14 @@
         Мем-буст x2 на 30 сек — 250 ₽
       </button>
 
+      <button class="btn" id="dailyButton">
+        Забрать ежедневный бонус
+      </button>
+
+      <button class="btn" id="shareButton">
+        Позвать друга
+      </button>
+
       <button class="btn" id="resetButton">
         Сбросить прогресс
       </button>
@@ -146,17 +154,27 @@
 	  tg.expand();
 	}
 
-	const defaultState = {
-	  money: 0,
-	  perClick: 1,
-	  perSecond: 0,
-	  clickUpgradeLevel: 0,
-	  autoUpgradeLevel: 0,
-	  clickUpgradeCost: 25,
-	  autoUpgradeCost: 100,
-	  boostActive: false,
-	  boostEndTime: 0
-	};
+  const telegramUser = tg?.initDataUnsafe?.user;
+
+  if (telegramUser?.first_name) {
+    setTimeout(() => {
+      subtitleEl.textContent = `${telegramUser.first_name}, кликай и стань легендой района.`;
+    }, 0);
+  }
+
+    const defaultState = {
+      money: 0,
+      perClick: 1,
+      perSecond: 0,
+      clickUpgradeLevel: 0,
+      autoUpgradeLevel: 0,
+      clickUpgradeCost: 25,
+      autoUpgradeCost: 100,
+      boostActive: false,
+      boostEndTime: 0,
+      lastSaveTime: Date.now(),
+      dailyBonusLastClaim: 0
+    };
 
     let state = loadGame();
 
@@ -166,15 +184,27 @@
     const upgradeClick = document.getElementById("upgradeClick");
     const upgradeAuto = document.getElementById("upgradeAuto");
     const boostButton = document.getElementById("boostButton");
+    const dailyButton = document.getElementById("dailyButton");
+    const shareButton = document.getElementById("shareButton");
     const resetButton = document.getElementById("resetButton");
     const eventText = document.getElementById("eventText");
+    const subtitleEl = document.querySelector(".subtitle");
 
     function loadGame() {
       const saved = localStorage.getItem("bomzhara_ceo_save");
-      return saved ? JSON.parse(saved) : { ...defaultState };
+
+      if (!saved) {
+        return { ...defaultState };
+      }
+
+      return {
+        ...defaultState,
+        ...JSON.parse(saved)
+      };
     }
 
     function saveGame() {
+      state.lastSaveTime = Date.now();
       localStorage.setItem("bomzhara_ceo_save", JSON.stringify(state));
     }
 
@@ -183,6 +213,26 @@
       if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + " млн ₽";
       if (value >= 1_000) return (value / 1_000).toFixed(1) + " тыс ₽";
       return Math.floor(value) + " ₽";
+    }
+
+    function applyOfflineProgress() {
+    const now = Date.now();
+    const awaySeconds = Math.floor((now - state.lastSaveTime) / 1000);
+
+      if (awaySeconds < 10 || state.perSecond <= 0) {
+        return;
+      }
+
+    const maxOfflineSeconds = 60 * 60 * 3;
+    const countedSeconds = Math.min(awaySeconds, maxOfflineSeconds);
+    const earned = countedSeconds * state.perSecond;
+
+      state.money += earned;
+
+      setTimeout(() => {
+        showFloatingText(`Пока тебя не было: +${formatMoney(earned)}`);
+        updateUI();
+      }, 500);
     }
 
     function getBoostMultiplier() {
@@ -220,7 +270,14 @@
       upgradeClick.disabled = state.money < state.clickUpgradeCost;
       upgradeAuto.disabled = state.money < state.autoUpgradeCost;
       boostButton.disabled = state.money < 250 || state.boostActive;
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+      const dailyReady = now - state.dailyBonusLastClaim >= oneDay;
 
+      dailyButton.disabled = !dailyReady;
+      dailyButton.textContent = dailyReady
+        ? "Забрать ежедневный бонус"
+        : "Ежедневный бонус уже забран";
       saveGame();
     }
 
@@ -234,8 +291,11 @@
     }
 
     clickButton.addEventListener("click", () => {
+      tg?.HapticFeedback?.impactOccurred?.("light");
+
       const gain = state.perClick * getBoostMultiplier();
       state.money += gain;
+
       showFloatingText(`+${formatMoney(gain)}. Улица уважает тебя.`);
       updateUI();
     });
@@ -275,6 +335,41 @@
       updateUI();
     });
 
+    dailyButton.addEventListener("click", () => {
+    const now = Date.now();
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    if (now - state.dailyBonusLastClaim < oneDay) {
+      return;
+    }
+
+    const bonus = 500 + state.clickUpgradeLevel * 50 + state.autoUpgradeLevel * 100;
+
+    state.money += bonus;
+    state.dailyBonusLastClaim = now;
+
+    tg?.HapticFeedback?.notificationOccurred?.("success");
+
+    showFloatingText(`Ежедневный бонус: +${formatMoney(bonus)}`);
+    updateUI();
+    });
+
+    shareButton.addEventListener("click", () => {
+      const text = encodeURIComponent(
+        `Я уже строю империю в “Бомжара CEO” 🥴\nСможешь обогнать меня?`
+      );
+
+      const url = encodeURIComponent("https://t.me/bomzhara_ceo_bot");
+
+      const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+
+      if (tg?.openTelegramLink) {
+        tg.openTelegramLink(shareUrl);
+      } else {
+        window.open(shareUrl, "_blank");
+      }
+    });
+
     resetButton.addEventListener("click", () => {
       const confirmed = confirm("Точно сбросить прогресс?");
       if (!confirmed) return;
@@ -306,7 +401,8 @@
       }
     }, 15000);
 
-    updateUI();
+  applyOfflineProgress();
+  updateUI();
   </script>
 </body>
 </html>
