@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Бомжара CEO</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #1f1f2e, #111118);
+      color: white;
+      text-align: center;
+      user-select: none;
+    }
+
+    .game {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .money {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 20px 0 5px;
+    }
+
+    .income {
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    .character {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffce73, #d88a22);
+      margin: 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      box-shadow: 0 10px 0 #8d5415;
+      cursor: pointer;
+      transition: transform 0.08s, box-shadow 0.08s;
+    }
+
+    .character:active {
+      transform: translateY(8px) scale(0.97);
+      box-shadow: 0 2px 0 #8d5415;
+    }
+
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 8px 0;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #ffcc4d;
+      color: #1c1c1c;
+    }
+
+    .btn:disabled {
+      background: #555;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .small {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .event {
+      min-height: 22px;
+      margin-top: 15px;
+      color: #ffcc4d;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game">
+    <h1>Бомжара CEO</h1>
+    <div class="subtitle">Кликай, богатея. Стань легендой района.</div>
+
+    <div class="money" id="money">0 ₽</div>
+    <div class="income" id="income">+0 ₽/сек · +1 ₽/клик</div>
+
+    <div class="character" id="clickButton">🥴</div>
+
+    <div class="event" id="eventText"></div>
+
+    <div class="panel">
+      <button class="btn" id="upgradeClick">
+        Купить “Рваный стаканчик” — 25 ₽
+      </button>
+
+      <button class="btn" id="upgradeAuto">
+        Купить “Шаурма-точку” — 100 ₽
+      </button>
+
+      <button class="btn" id="boostButton">
+        Мем-буст x2 на 30 сек — 250 ₽
+      </button>
+
+      <button class="btn" id="resetButton">
+        Сбросить прогресс
+      </button>
+
+      <p class="small">
+        MVP v0.1 — дальше добавим друзей, лидерборд, задания и Telegram.
+      </p>
+    </div>
+  </div>
+
+  <script>
+	const tg = window.Telegram?.WebApp;
+
+	if (tg) {
+	  tg.ready();
+	  tg.expand();
+	}
+
+	const defaultState = {
+	  money: 0,
+	  perClick: 1,
+	  perSecond: 0,
+	  clickUpgradeLevel: 0,
+	  autoUpgradeLevel: 0,
+	  clickUpgradeCost: 25,
+	  autoUpgradeCost: 100,
+	  boostActive: false,
+	  boostEndTime: 0
+	};
+
+    let state = loadGame();
+
+    const moneyEl = document.getElementById("money");
+    const incomeEl = document.getElementById("income");
+    const clickButton = document.getElementById("clickButton");
+    const upgradeClick = document.getElementById("upgradeClick");
+    const upgradeAuto = document.getElementById("upgradeAuto");
+    const boostButton = document.getElementById("boostButton");
+    const resetButton = document.getElementById("resetButton");
+    const eventText = document.getElementById("eventText");
+
+    function loadGame() {
+      const saved = localStorage.getItem("bomzhara_ceo_save");
+      return saved ? JSON.parse(saved) : { ...defaultState };
+    }
+
+    function saveGame() {
+      localStorage.setItem("bomzhara_ceo_save", JSON.stringify(state));
+    }
+
+    function formatMoney(value) {
+      if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1) + " млрд ₽";
+      if (value >= 1_000_000) return (value / 1_000_000).toFixed(1) + " млн ₽";
+      if (value >= 1_000) return (value / 1_000).toFixed(1) + " тыс ₽";
+      return Math.floor(value) + " ₽";
+    }
+
+    function getBoostMultiplier() {
+      const now = Date.now();
+
+      if (state.boostActive && now < state.boostEndTime) {
+        return 2;
+      }
+
+      if (state.boostActive && now >= state.boostEndTime) {
+        state.boostActive = false;
+        eventText.textContent = "Буст закончился. Район снова суров.";
+      }
+
+      return 1;
+    }
+
+    function updateUI() {
+      const boost = getBoostMultiplier();
+
+      moneyEl.textContent = formatMoney(state.money);
+      incomeEl.textContent =
+        `+${formatMoney(state.perSecond * boost)}/сек · +${formatMoney(state.perClick * boost)}/клик`;
+
+      upgradeClick.textContent =
+        `Купить “Рваный стаканчик” ур. ${state.clickUpgradeLevel + 1} — ${formatMoney(state.clickUpgradeCost)}`;
+
+      upgradeAuto.textContent =
+        `Купить “Шаурма-точку” ур. ${state.autoUpgradeLevel + 1} — ${formatMoney(state.autoUpgradeCost)}`;
+
+      boostButton.textContent = state.boostActive
+        ? "Мем-буст уже активен"
+        : "Мем-буст x2 на 30 сек — 250 ₽";
+
+      upgradeClick.disabled = state.money < state.clickUpgradeCost;
+      upgradeAuto.disabled = state.money < state.autoUpgradeCost;
+      boostButton.disabled = state.money < 250 || state.boostActive;
+
+      saveGame();
+    }
+
+    function showFloatingText(text) {
+      eventText.textContent = text;
+      setTimeout(() => {
+        if (eventText.textContent === text) {
+          eventText.textContent = "";
+        }
+      }, 1800);
+    }
+
+    clickButton.addEventListener("click", () => {
+      const gain = state.perClick * getBoostMultiplier();
+      state.money += gain;
+      showFloatingText(`+${formatMoney(gain)}. Улица уважает тебя.`);
+      updateUI();
+    });
+
+    upgradeClick.addEventListener("click", () => {
+      if (state.money < state.clickUpgradeCost) return;
+
+      state.money -= state.clickUpgradeCost;
+      state.clickUpgradeLevel += 1;
+      state.perClick += 1 + state.clickUpgradeLevel;
+      state.clickUpgradeCost = Math.floor(state.clickUpgradeCost * 1.7);
+
+      showFloatingText("Стаканчик прокачан. Доход с клика вырос.");
+      updateUI();
+    });
+
+    upgradeAuto.addEventListener("click", () => {
+      if (state.money < state.autoUpgradeCost) return;
+
+      state.money -= state.autoUpgradeCost;
+      state.autoUpgradeLevel += 1;
+      state.perSecond += 3 + state.autoUpgradeLevel * 2;
+      state.autoUpgradeCost = Math.floor(state.autoUpgradeCost * 1.85);
+
+      showFloatingText("Шаурма-точка открыта. Деньги капают сами.");
+      updateUI();
+    });
+
+    boostButton.addEventListener("click", () => {
+      if (state.money < 250 || state.boostActive) return;
+
+      state.money -= 250;
+      state.boostActive = true;
+      state.boostEndTime = Date.now() + 30_000;
+
+      showFloatingText("Мем-буст активирован: доход x2 на 30 секунд!");
+      updateUI();
+    });
+
+    resetButton.addEventListener("click", () => {
+      const confirmed = confirm("Точно сбросить прогресс?");
+      if (!confirmed) return;
+
+      state = { ...defaultState };
+      saveGame();
+      updateUI();
+    });
+
+    setInterval(() => {
+      const boost = getBoostMultiplier();
+      state.money += state.perSecond * boost;
+      updateUI();
+    }, 1000);
+
+    setInterval(() => {
+      const events = [
+        "Прохожий кинул сотку за харизму.",
+        "Блогер снял тебя в TikTok. Репутация растёт.",
+        "Бабушка сказала: “молодец”. Мотивация +100.",
+        "Районный инвестор заинтересовался твоим бизнесом."
+      ];
+
+      if (Math.random() < 0.35) {
+        const bonus = 20 + Math.floor(Math.random() * 80);
+        state.money += bonus;
+        showFloatingText(`${events[Math.floor(Math.random() * events.length)]} +${bonus} ₽`);
+        updateUI();
+      }
+    }, 15000);
+
+    updateUI();
+  </script>
+</body>
+</html>
