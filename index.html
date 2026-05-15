@@ -450,7 +450,7 @@
           <div class="rank" id="rankText">🥴 Бомж района</div>
         </div>
         <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
-        <div class="progressText" id="progressText">До уровня “Сборщик мелочи”: 500 ₽</div>
+        <div class="progressText" id="progressText">До уровня “Сборщик мелочи”: 1 000 ₽</div>
         <div class="character" id="clickButton" role="button" aria-label="Кликнуть"><span class="characterEmoji" id="characterEmoji">🥴</span></div>
         <div class="event" id="eventText"></div>
         <div class="nextGoal">
@@ -500,7 +500,7 @@
               <div class="districtStatValue" id="districtBusinessLevels">0</div>
             </div>
           </div>
-          <div class="districtProgressText" id="districtProgressText">До следующего района: 500 ₽</div>
+          <div class="districtProgressText" id="districtProgressText">До следующего района: 3 бизнес-ур.</div>
           <div class="districtProgressWrap"><div class="districtProgressBar" id="districtProgressBar"></div></div>
         </div>
 
@@ -525,8 +525,8 @@
 
       <div class="panel" id="tab-quests">
         <div class="panelHeader">
-          <h2>Задания</h2>
-          <span class="summaryPill" id="questsSummary">0 выполнено</span>
+          <h2>Достижения</h2>
+          <span class="summaryPill" id="questsSummary">0 готово</span>
         </div>
         <div class="questsList" id="questsList"></div>
       </div>
@@ -549,7 +549,7 @@
       <button class="tabBtn active" data-tab="main">Главное</button>
       <button class="tabBtn" data-tab="clicks">Клик</button>
       <button class="tabBtn" data-tab="business">Бизнес</button>
-      <button class="tabBtn" data-tab="quests">Задания</button>
+      <button class="tabBtn" data-tab="quests">Достижения</button>
     </div>
 
     <script>
@@ -563,20 +563,20 @@
       const BOT_URL = "https://t.me/bomzhara_ceo_bot";
 
       const dailyRewards = [
-        { day: 1, money: 400, label: "400 ₽" },
-        { day: 2, money: 900, label: "900 ₽" },
-        { day: 3, money: 2_000, label: "2 000 ₽" },
-        { day: 4, money: 4_000, label: "4 000 ₽" },
-        { day: 5, money: 8_000, label: "8 000 ₽" },
-        { day: 6, money: 15_000, label: "15 000 ₽" },
-        { day: 7, money: 35_000, boostSeconds: 60, label: "35 000 ₽ + буст" },
+        { day: 1, money: 120, label: "120 ₽" },
+        { day: 2, money: 300, label: "300 ₽" },
+        { day: 3, money: 700, label: "700 ₽" },
+        { day: 4, money: 1_500, label: "1 500 ₽" },
+        { day: 5, money: 3_500, label: "3 500 ₽" },
+        { day: 6, money: 7_500, label: "7 500 ₽" },
+        { day: 7, money: 15_000, boostSeconds: 45, label: "15 000 ₽ + буст" },
       ];
 
       const onboardingSteps = [
         { icon: "👆", title: "Кликай по персонажу", text: "Каждый тап приносит деньги. Чем выше прокачка клика, тем быстрее растёт баланс." },
         { icon: "🛒", title: "Покупай апгрейды", text: "Во вкладках “Клик” и “Бизнес” покупай улучшения. Клик даёт быстрый рост, бизнес приносит деньги сам." },
-        { icon: "🎯", title: "Забирай задания", text: "Задания дают крупные награды и подсказывают, что делать дальше. Готовые награды ищи во вкладке “Задания”." },
-        { icon: "🏙️", title: "Развивай район", text: "Ранг и район считаются по общему заработку, поэтому статус не падает после покупок." },
+        { icon: "🎯", title: "Забирай задания", text: "Достижения идут по этапам: сначала проще, потом сложнее. Выполнил этап — забрал награду — открыл следующий." },
+        { icon: "🏙️", title: "Развивай район", text: "Ранг персонажа растёт от общего заработка, а район развивается от бизнес-уровней. Это разные ветки прогресса." },
         { icon: "🎁", title: "Возвращайся каждый день", text: "Ежедневная серия наград растёт до 7 дня. Если пропустить день, серия начнётся заново." },
       ];
 
@@ -592,6 +592,7 @@
         onboardingDone: false,
         upgrades: {},
         claimedQuests: {},
+        achievements: {},
         stats: {
           clickCount: 0,
           dailyClaimCount: 0,
@@ -603,22 +604,22 @@
 
       const ranks = [
         { title: "Бомж района", icon: "🥴", need: 0 },
-        { title: "Сборщик мелочи", icon: "🧢", need: 500 },
-        { title: "Шаурма-стажёр", icon: "🌯", need: 5_000 },
-        { title: "Дворовый бизнесмен", icon: "😎", need: 25_000 },
-        { title: "Шаурма-магнат", icon: "🤵", need: 150_000 },
-        { title: "Олигарх района", icon: "🤑", need: 750_000 },
-        { title: "Легенда района", icon: "👑", need: 5_000_000 },
+        { title: "Сборщик мелочи", icon: "🧢", need: 1_000 },
+        { title: "Шаурма-стажёр", icon: "🌯", need: 8_000 },
+        { title: "Дворовый бизнесмен", icon: "😎", need: 50_000 },
+        { title: "Шаурма-магнат", icon: "🤵", need: 250_000 },
+        { title: "Олигарх района", icon: "🤑", need: 1_500_000 },
+        { title: "Легенда района", icon: "👑", need: 10_000_000 },
       ];
 
       const districtStages = [
         { title: "Картонная база", icon: "📦", need: 0, description: "Начало пути. Район пока не верит, но смотрит." },
-        { title: "Точка у метро", icon: "🚇", need: 500, description: "Первые деньги пошли. Люди начали узнавать тебя." },
-        { title: "Шаурма-угол", icon: "🌯", need: 5_000, description: "Пахнет бизнесом. Район уже обсуждает твой рост." },
-        { title: "Дворовый офис", icon: "🏚️", need: 25_000, description: "У тебя появились система, клиенты и свои правила." },
-        { title: "Сеть района", icon: "🏪", need: 150_000, description: "Теперь работает не только палец, но и вся экономика." },
-        { title: "Империя квартала", icon: "🏙️", need: 750_000, description: "Ты уже не просишь внимания. За тобой наблюдают." },
-        { title: "Легенда города", icon: "👑", need: 5_000_000, description: "Финальная форма. Район стал твоей историей." },
+        { title: "Точка у метро", icon: "🚇", need: 3, description: "Первые бизнес-уровни куплены. У метро тебя уже узнают." },
+        { title: "Шаурма-угол", icon: "🌯", need: 8, description: "Пахнет системой: деньги начинают приходить сами." },
+        { title: "Дворовый офис", icon: "🏚️", need: 16, description: "У района появились процессы, клиенты и понятные правила." },
+        { title: "Сеть района", icon: "🏪", need: 30, description: "Бизнесов становится много, район уже работает на тебя." },
+        { title: "Империя квартала", icon: "🏙️", need: 55, description: "Твой район превращается в настоящую экономику." },
+        { title: "Легенда города", icon: "👑", need: 90, description: "Финальная стадия района: бизнес-машина работает без остановки." },
       ];
 
       const clickUpgrades = [
@@ -639,15 +640,79 @@
 
       let state = loadGame();
 
-      const quests = [
-        { id: "click250", title: "Разогреть палец", description: "Сделай 250 кликов", target: 250, reward: 750, getProgress: () => state.stats.clickCount },
-        { id: "click1000", title: "Кликер района", description: "Сделай 1 000 кликов", target: 1_000, reward: 3_500, getProgress: () => state.stats.clickCount },
-        { id: "earn10000", title: "Первые серьёзные деньги", description: "Заработай всего 10 000 ₽", target: 10_000, reward: 4_500, getProgress: () => state.totalEarned },
-        { id: "clickUpgrades10", title: "Прокачать харизму", description: "Купи 10 апгрейдов клика", target: 10, reward: 6_000, getProgress: () => getTotalUpgradeLevel(clickUpgrades) },
-        { id: "businessUpgrades8", title: "Бизнес пахнет шаурмой", description: "Купи 8 бизнес-апгрейдов", target: 8, reward: 9_000, getProgress: () => getTotalUpgradeLevel(businessUpgrades) },
-        { id: "daily3", title: "Возвращайся в район", description: "Забери ежедневный бонус 3 раза", target: 3, reward: 15_000, getProgress: () => state.stats.dailyClaimCount },
-        { id: "share3", title: "Позови банду", description: "Позови друга 3 раза", target: 3, reward: 8_000, getProgress: () => state.stats.shareCount },
-        { id: "rankBusinessman", title: "Стать бизнесменом", description: "Достигни 25 000 ₽ общего заработка", target: 25_000, reward: 12_000, getProgress: () => state.totalEarned },
+      const achievements = [
+        {
+          id: "clicks",
+          title: "Клики района",
+          description: "Кликай по персонажу и открывай новые этапы",
+          getProgress: () => state.stats.clickCount,
+          stages: [
+            { target: 250, reward: 350 },
+            { target: 1_000, reward: 1_800 },
+            { target: 5_000, reward: 10_000 },
+            { target: 15_000, reward: 55_000 },
+            { target: 50_000, reward: 250_000 },
+          ],
+        },
+        {
+          id: "clickUpgrades",
+          title: "Прокачка харизмы",
+          description: "Покупай улучшения клика",
+          getProgress: () => getTotalUpgradeLevel(clickUpgrades),
+          stages: [
+            { target: 5, reward: 900 },
+            { target: 15, reward: 5_000 },
+            { target: 35, reward: 25_000 },
+            { target: 75, reward: 140_000 },
+          ],
+        },
+        {
+          id: "businessUpgrades",
+          title: "Бизнес-план района",
+          description: "Покупай бизнес-улучшения и развивай район",
+          getProgress: () => getTotalUpgradeLevel(businessUpgrades),
+          stages: [
+            { target: 3, reward: 700 },
+            { target: 10, reward: 4_500 },
+            { target: 25, reward: 30_000 },
+            { target: 60, reward: 180_000 },
+          ],
+        },
+        {
+          id: "earned",
+          title: "Капитал персонажа",
+          description: "Зарабатывай деньги за всё время игры",
+          getProgress: () => state.totalEarned,
+          stages: [
+            { target: 10_000, reward: 2_000 },
+            { target: 100_000, reward: 18_000 },
+            { target: 1_000_000, reward: 150_000 },
+            { target: 10_000_000, reward: 1_200_000 },
+          ],
+        },
+        {
+          id: "daily",
+          title: "Возвращение в район",
+          description: "Забирай ежедневную награду несколько дней",
+          getProgress: () => state.stats.dailyClaimCount,
+          stages: [
+            { target: 1, reward: 300 },
+            { target: 3, reward: 2_500 },
+            { target: 7, reward: 20_000 },
+            { target: 14, reward: 120_000 },
+          ],
+        },
+        {
+          id: "share",
+          title: "Позови банду",
+          description: "Делись игрой с друзьями",
+          getProgress: () => state.stats.shareCount,
+          stages: [
+            { target: 1, reward: 400 },
+            { target: 3, reward: 2_000 },
+            { target: 10, reward: 15_000 },
+          ],
+        },
       ];
 
       const moneyEl = document.getElementById("money");
@@ -720,6 +785,7 @@
           ...saved,
           upgrades: { ...base.upgrades, ...(saved.upgrades || {}) },
           claimedQuests: { ...base.claimedQuests, ...(saved.claimedQuests || {}) },
+          achievements: { ...base.achievements, ...(saved.achievements || {}) },
           stats: { ...base.stats, ...(saved.stats || {}) },
         };
 
@@ -814,19 +880,26 @@
         progressText.textContent = `До “${nextRank.title}”: ${formatMoney(nextRank.need - state.totalEarned)}`;
       }
 
+      function getDistrictProgressValue() {
+        return getTotalUpgradeLevel(businessUpgrades);
+      }
+
       function getCurrentDistrictStage() {
+        const progressValue = getDistrictProgressValue();
         let currentStage = districtStages[0];
-        for (const stage of districtStages) if (state.totalEarned >= stage.need) currentStage = stage;
+        for (const stage of districtStages) if (progressValue >= stage.need) currentStage = stage;
         return currentStage;
       }
 
       function getNextDistrictStage() {
-        return districtStages.find((stage) => state.totalEarned < stage.need) || null;
+        const progressValue = getDistrictProgressValue();
+        return districtStages.find((stage) => progressValue < stage.need) || null;
       }
 
       function updateDistrictUI() {
         const currentStage = getCurrentDistrictStage();
         const nextStage = getNextDistrictStage();
+        const progressValue = getDistrictProgressValue();
         const clickLevels = getTotalUpgradeLevel(clickUpgrades);
         const businessLevels = getTotalUpgradeLevel(businessUpgrades);
 
@@ -843,8 +916,8 @@
         }
 
         const currentNeed = currentStage.need;
-        const progress = ((state.totalEarned - currentNeed) / (nextStage.need - currentNeed)) * 100;
-        districtProgressText.textContent = `До “${nextStage.title}”: ${formatMoney(nextStage.need - state.totalEarned)}`;
+        const progress = ((progressValue - currentNeed) / (nextStage.need - currentNeed)) * 100;
+        districtProgressText.textContent = `До “${nextStage.title}”: ${nextStage.need - progressValue} бизнес-ур.`;
         districtProgressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
       }
 
@@ -937,57 +1010,73 @@
         }
       }
 
-      function getQuestStatus(quest) {
-        const progress = Math.min(quest.getProgress(), quest.target);
+      function getAchievementLevel(achievement) {
+        return Math.min(state.achievements[achievement.id] || 0, achievement.stages.length);
+      }
+
+      function getAchievementStatus(achievement) {
+        const level = getAchievementLevel(achievement);
+        const completedAll = level >= achievement.stages.length;
+        const stage = completedAll ? achievement.stages[achievement.stages.length - 1] : achievement.stages[level];
+        const progress = Math.min(achievement.getProgress(), stage.target);
+
         return {
+          level,
+          stage,
           progress,
-          percent: Math.min(100, (progress / quest.target) * 100),
-          complete: progress >= quest.target,
-          claimed: Boolean(state.claimedQuests[quest.id]),
+          percent: Math.min(100, (progress / stage.target) * 100),
+          complete: !completedAll && progress >= stage.target,
+          completedAll,
         };
       }
 
       function renderQuests() {
         questsList.innerHTML = "";
-        for (const quest of quests) {
+        for (const achievement of achievements) {
           const card = document.createElement("div");
           card.className = "questCard";
-          card.id = `quest-${quest.id}`;
+          card.id = `quest-${achievement.id}`;
           card.innerHTML = `
             <div class="questTop">
               <div>
-                <div class="cardTitle">${quest.title}</div>
-                <div class="cardDesc">${quest.description}</div>
+                <div class="cardTitle" id="quest-title-${achievement.id}">${achievement.title}</div>
+                <div class="cardDesc" id="quest-desc-${achievement.id}">${achievement.description}</div>
               </div>
-              <div class="questBadge">+${formatMoney(quest.reward)}</div>
+              <div class="questBadge" id="quest-reward-${achievement.id}">+0 ₽</div>
             </div>
-            <div class="questProgressText" id="quest-text-${quest.id}"></div>
-            <div class="questProgressWrap"><div class="questProgressBar" id="quest-bar-${quest.id}"></div></div>
-            <button class="btn claimBtn" id="claim-${quest.id}">Забрать</button>
+            <div class="questProgressText" id="quest-text-${achievement.id}"></div>
+            <div class="questProgressWrap"><div class="questProgressBar" id="quest-bar-${achievement.id}"></div></div>
+            <button class="btn claimBtn" id="claim-${achievement.id}">Забрать</button>
           `;
           questsList.appendChild(card);
-          document.getElementById(`claim-${quest.id}`).addEventListener("click", () => claimQuest(quest));
+          document.getElementById(`claim-${achievement.id}`).addEventListener("click", () => claimAchievement(achievement));
         }
       }
 
       function updateQuestsUI() {
-        for (const quest of quests) {
-          const status = getQuestStatus(quest);
-          const card = document.getElementById(`quest-${quest.id}`);
-          const text = document.getElementById(`quest-text-${quest.id}`);
-          const bar = document.getElementById(`quest-bar-${quest.id}`);
-          const button = document.getElementById(`claim-${quest.id}`);
-          if (!card || !text || !bar || !button) continue;
+        for (const achievement of achievements) {
+          const status = getAchievementStatus(achievement);
+          const card = document.getElementById(`quest-${achievement.id}`);
+          const text = document.getElementById(`quest-text-${achievement.id}`);
+          const bar = document.getElementById(`quest-bar-${achievement.id}`);
+          const button = document.getElementById(`claim-${achievement.id}`);
+          const reward = document.getElementById(`quest-reward-${achievement.id}`);
+          const title = document.getElementById(`quest-title-${achievement.id}`);
+          if (!card || !text || !bar || !button || !reward || !title) continue;
 
-          card.classList.toggle("questDone", status.complete && !status.claimed);
-          text.textContent = `${formatCount(status.progress)} / ${formatCount(quest.target)}`;
-          bar.style.width = `${status.percent}%`;
+          card.classList.toggle("questDone", status.complete);
+          title.textContent = `${achievement.title} · этап ${Math.min(status.level + 1, achievement.stages.length)}/${achievement.stages.length}`;
+          reward.textContent = status.completedAll ? "Готово" : `+${formatMoney(status.stage.reward)}`;
+          text.textContent = status.completedAll
+            ? "Все этапы достижения закрыты"
+            : `${formatCount(status.progress)} / ${formatCount(status.stage.target)}`;
+          bar.style.width = status.completedAll ? "100%" : `${status.percent}%`;
 
-          if (status.claimed) {
-            button.textContent = "Получено";
+          if (status.completedAll) {
+            button.textContent = "Все этапы получены";
             button.disabled = true;
           } else if (status.complete) {
-            button.textContent = `Забрать +${formatMoney(quest.reward)}`;
+            button.textContent = `Забрать +${formatMoney(status.stage.reward)}`;
             button.disabled = false;
           } else {
             button.textContent = "Не выполнено";
@@ -997,26 +1086,26 @@
       }
 
       function updateActiveQuests() {
-        const active = quests
-          .filter((quest) => !state.claimedQuests[quest.id])
-          .sort((a, b) => getQuestStatus(b).percent - getQuestStatus(a).percent)
+        const active = achievements
+          .filter((achievement) => !getAchievementStatus(achievement).completedAll)
+          .sort((a, b) => getAchievementStatus(b).percent - getAchievementStatus(a).percent)
           .slice(0, 2);
 
         activeQuestsList.innerHTML = "";
         if (active.length === 0) {
-          activeQuestsList.innerHTML = '<div class="emptyText">Все задания забраны. Скоро добавим ежедневные цепочки.</div>';
+          activeQuestsList.innerHTML = '<div class="emptyText">Все достижения закрыты. Скоро добавим новые ветки.</div>';
           return;
         }
 
-        for (const quest of active) {
-          const status = getQuestStatus(quest);
+        for (const achievement of active) {
+          const status = getAchievementStatus(achievement);
           const card = document.createElement("div");
           card.className = "miniQuestCard";
           card.innerHTML = `
             <div class="questTop">
               <div>
-                <div class="cardTitle">${quest.title}</div>
-                <div class="cardDesc">${formatCount(status.progress)} / ${formatCount(quest.target)}</div>
+                <div class="cardTitle">${achievement.title}</div>
+                <div class="cardDesc">Этап ${status.level + 1}/${achievement.stages.length} · ${formatCount(status.progress)} / ${formatCount(status.stage.target)}</div>
               </div>
               <div class="questBadge">${Math.floor(status.percent)}%</div>
             </div>
@@ -1026,14 +1115,14 @@
         }
       }
 
-      function claimQuest(quest) {
-        const status = getQuestStatus(quest);
-        if (!status.complete || status.claimed) return;
+      function claimAchievement(achievement) {
+        const status = getAchievementStatus(achievement);
+        if (!status.complete || status.completedAll) return;
 
-        state.claimedQuests[quest.id] = true;
-        addMoney(quest.reward);
+        addMoney(status.stage.reward);
+        state.achievements[achievement.id] = status.level + 1;
         tg?.HapticFeedback?.notificationOccurred?.("success");
-        showFloatingText(`Задание выполнено: +${formatMoney(quest.reward)}`);
+        showFloatingText(`Достижение: +${formatMoney(status.stage.reward)}`);
         updateUI();
       }
 
@@ -1045,12 +1134,9 @@
       }
 
       function updateNextGoal() {
-        const readyQuest = quests.find((quest) => {
-          const status = getQuestStatus(quest);
-          return status.complete && !status.claimed;
-        });
-        if (readyQuest) {
-          nextGoalText.textContent = `Забрать награду: “${readyQuest.title}”`;
+        const readyAchievement = achievements.find((achievement) => getAchievementStatus(achievement).complete);
+        if (readyAchievement) {
+          nextGoalText.textContent = `Забрать достижение: “${readyAchievement.title}”`;
           return;
         }
 
@@ -1065,16 +1151,14 @@
       function updateSummaries() {
         const clickLevels = getTotalUpgradeLevel(clickUpgrades);
         const businessLevels = getTotalUpgradeLevel(businessUpgrades);
-        const completed = quests.filter((quest) => state.claimedQuests[quest.id]).length;
-        const ready = quests.filter((quest) => {
-          const status = getQuestStatus(quest);
-          return status.complete && !status.claimed;
-        }).length;
+        const completedStages = achievements.reduce((sum, achievement) => sum + getAchievementLevel(achievement), 0);
+        const totalStages = achievements.reduce((sum, achievement) => sum + achievement.stages.length, 0);
+        const ready = achievements.filter((achievement) => getAchievementStatus(achievement).complete).length;
 
         mainSummary.textContent = `${formatMoney(getPerClick())}/клик`;
         clickSummary.textContent = `${clickLevels} ур.`;
         businessSummary.textContent = `${businessLevels} ур.`;
-        questsSummary.textContent = ready > 0 ? `${ready} забрать` : `${completed}/${quests.length}`;
+        questsSummary.textContent = ready > 0 ? `${ready} забрать` : `${completedStages}/${totalStages}`;
       }
 
 
