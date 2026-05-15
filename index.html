@@ -7,7 +7,40 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html, body {
+        overscroll-behavior: none;
+      }
+
+      button,
+      .character,
+      .tabBtn,
+      .btn {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+        outline: none;
+      }
+
+      button:focus,
+      .btn:focus,
+      .tabBtn:focus,
+      .character:focus {
+        outline: none;
+      }
+
+      button:focus-visible,
+      .btn:focus-visible,
+      .tabBtn:focus-visible {
+        outline: 2px solid rgba(255, 204, 77, 0.5);
+        outline-offset: 2px;
+      }
       :root {
         --bg1: #1f1f2e;
         --bg2: #111118;
@@ -20,7 +53,11 @@
       }
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.35;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
         background: linear-gradient(180deg, var(--bg1), var(--bg2));
         color: white;
         text-align: center;
@@ -39,17 +76,17 @@
         gap: 10px;
         margin-bottom: 10px;
       }
-      h1 { margin: 0; font-size: 24px; letter-spacing: -0.3px; }
-      .subtitle { color: var(--muted); font-size: 13px; text-align: right; line-height: 1.25; }
+      h1 { margin: 0; font-size: 23px; letter-spacing: -0.25px; font-weight: 700; }
+      .subtitle { color: var(--muted); font-size: 13px; text-align: right; line-height: 1.25; font-weight: 500; }
       .heroPanel {
         background: var(--card);
         border: 1px solid var(--line);
         border-radius: 22px;
-        padding: 14px;
+        padding: 13px;
         box-shadow: 0 14px 40px rgba(0,0,0,0.22);
       }
-      .money { font-size: 36px; font-weight: 800; margin: 2px 0 4px; }
-      .income { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+      .money { font-size: 34px; font-weight: 700; letter-spacing: -0.6px; margin: 2px 0 4px; }
+      .income { color: var(--muted); font-size: 13px; margin-bottom: 8px; font-weight: 500; }
       .rankRow {
         display: flex;
         align-items: center;
@@ -65,7 +102,7 @@
         border-radius: 999px;
         background: rgba(255, 204, 77, 0.14);
         color: var(--accent);
-        font-weight: 800;
+        font-weight: 700;
         font-size: 14px;
       }
       .progressWrap, .questProgressWrap {
@@ -82,23 +119,36 @@
         border-radius: 999px;
         transition: width 0.2s ease;
       }
-      .progressText { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+      .progressText { font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
       .character {
-        width: 152px;
-        height: 152px;
+        width: 140px;
+        height: 140px;
         border-radius: 50%;
         background: radial-gradient(circle, #ffce73, #d88a22);
         margin: 14px auto 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 72px;
+        font-size: 66px;
         box-shadow: 0 10px 0 #8d5415, 0 18px 40px rgba(255,204,77,0.12);
         cursor: pointer;
-        transition: transform 0.08s, box-shadow 0.08s;
+        transition: transform 0.08s, box-shadow 0.08s, filter 0.08s;
+        overflow: hidden;
+        border: none;
       }
-      .character:active { transform: translateY(8px) scale(0.97); box-shadow: 0 2px 0 #8d5415; }
-      .event { min-height: 22px; margin: 8px 0 0; color: var(--accent); font-weight: 800; font-size: 13px; }
+      .characterEmoji {
+        display: block;
+        line-height: 1;
+        transform: translateZ(0);
+        pointer-events: none;
+        background: transparent;
+      }
+      .character:active {
+        transform: translateY(8px) scale(0.97);
+        box-shadow: 0 2px 0 #8d5415;
+        filter: brightness(0.98);
+      }
+      .event { min-height: 21px; margin: 7px 0 0; color: var(--accent); font-weight: 700; font-size: 13px; }
       .nextGoal {
         margin-top: 10px;
         padding: 10px;
@@ -108,7 +158,7 @@
         text-align: left;
       }
       .goalLabel { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
-      .goalText { font-weight: 800; font-size: 14px; line-height: 1.3; }
+      .goalText { font-weight: 650; font-size: 14px; line-height: 1.3; }
       .panel {
         display: none;
         margin-top: 12px;
@@ -125,7 +175,7 @@
         gap: 10px;
         margin-bottom: 10px;
       }
-      h2 { margin: 0; font-size: 18px; text-align: left; }
+      h2 { margin: 0; font-size: 17px; text-align: left; font-weight: 700; }
       .summaryPill, .levelBadge, .questBadge {
         flex: 0 0 auto;
         border-radius: 999px;
@@ -133,39 +183,41 @@
         background: rgba(255, 255, 255, 0.1);
         color: rgba(255,255,255,0.82);
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 700;
       }
       .quickGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       .shopGrid, .questsList, .activeQuestsList { display: grid; gap: 8px; }
-      .activeQuestsList { margin-top: 8px; }
+      .activeQuestsList { margin-top: 8px; gap: 6px; }
       .upgradeCard, .questCard, .miniQuestCard {
         text-align: left;
         background: var(--card2);
         border: 1px solid var(--line);
         border-radius: 16px;
       }
-      .upgradeCard { padding: 10px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
-      .questCard { padding: 10px; }
-      .miniQuestCard { padding: 9px; }
-      .cardTitle { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
-      .cardDesc, .questProgressText { font-size: 12px; color: var(--muted); line-height: 1.3; }
+      .upgradeCard { padding: 9px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+      .questCard { padding: 9px; }
+      .miniQuestCard { padding: 8px 9px; }
+      .cardTitle { font-size: 14px; font-weight: 650; margin-bottom: 2px; letter-spacing: -0.05px; }
+      .cardDesc, .questProgressText { font-size: 12px; color: var(--muted); line-height: 1.25; font-weight: 500; }
       .upgradeMeta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
-      .effectBadge { border-radius: 999px; padding: 4px 8px; background: rgba(255,204,77,0.12); color: var(--accent); font-size: 12px; font-weight: 800; }
+      .effectBadge { border-radius: 999px; padding: 4px 8px; background: rgba(255,204,77,0.12); color: var(--accent); font-size: 12px; font-weight: 650; }
       .btn {
         width: 100%;
         border: none;
         border-radius: 14px;
         padding: 12px 10px;
         font-size: 14px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
         background: var(--accent);
         color: var(--accentText);
+        transition: transform 0.08s, filter 0.08s, background 0.08s;
       }
+      .btn:active:not(:disabled) { transform: scale(0.985); filter: brightness(0.96); }
       .btn:disabled { background: #555; color: #aaa; cursor: not-allowed; }
       .btn.secondary { background: rgba(255, 255, 255, 0.14); color: white; }
-      .buyBtn { width: 112px; padding: 10px 8px; font-size: 13px; margin: 0; }
-      .claimBtn { margin-top: 8px; padding: 10px 8px; font-size: 13px; }
+      .buyBtn { width: 106px; padding: 9px 8px; font-size: 13px; margin: 0; }
+      .claimBtn { margin-top: 7px; padding: 9px 8px; font-size: 13px; }
       .questTop { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
       .questProgressWrap { height: 7px; margin-top: 8px; }
       .questDone { border-color: rgba(255, 204, 77, 0.55); }
@@ -191,13 +243,15 @@
         background: rgba(255, 255, 255, 0.1);
         color: rgba(255, 255, 255, 0.78);
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 700;
         cursor: pointer;
+        transition: transform 0.08s, filter 0.08s, background 0.08s;
       }
+      .tabBtn:active { transform: scale(0.98); filter: brightness(0.96); }
       .tabBtn.active { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
       @media (max-width: 380px) {
-        .money { font-size: 31px; }
-        .character { width: 136px; height: 136px; font-size: 64px; }
+        .money { font-size: 30px; }
+        .character { width: 126px; height: 126px; font-size: 60px; }
         .buyBtn { width: 98px; font-size: 12px; }
         .tabBtn { font-size: 11px; }
       }
@@ -219,7 +273,7 @@
         </div>
         <div class="progressWrap"><div class="progressBar" id="progressBar"></div></div>
         <div class="progressText" id="progressText">До уровня “Сборщик мелочи”: 500 ₽</div>
-        <div class="character" id="clickButton">🥴</div>
+        <div class="character" id="clickButton" role="button" aria-label="Кликнуть"><span class="characterEmoji" id="characterEmoji">🥴</span></div>
         <div class="event" id="eventText"></div>
         <div class="nextGoal">
           <div class="goalLabel">Следующая цель</div>
@@ -346,6 +400,7 @@
       const progressBar = document.getElementById("progressBar");
       const progressText = document.getElementById("progressText");
       const clickButton = document.getElementById("clickButton");
+      const characterEmoji = document.getElementById("characterEmoji");
       const eventText = document.getElementById("eventText");
       const subtitleEl = document.getElementById("subtitle");
       const nextGoalText = document.getElementById("nextGoalText");
@@ -439,7 +494,7 @@
         const currentRank = getCurrentRank();
         const nextRank = getNextRank();
         rankText.textContent = `${currentRank.icon} ${currentRank.title}`;
-        clickButton.textContent = currentRank.icon;
+        characterEmoji.textContent = currentRank.icon;
 
         if (!nextRank) {
           progressBar.style.width = "100%";
@@ -605,7 +660,7 @@
         const active = quests
           .filter((quest) => !state.claimedQuests[quest.id])
           .sort((a, b) => getQuestStatus(b).percent - getQuestStatus(a).percent)
-          .slice(0, 3);
+          .slice(0, 2);
 
         activeQuestsList.innerHTML = "";
         if (active.length === 0) {
