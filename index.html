@@ -220,6 +220,69 @@
         border-color: rgba(255, 204, 77, 0.45);
       }
 
+
+
+      .tabs {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        padding: 8px 0 10px;
+        margin: 6px 0 0;
+        background: linear-gradient(180deg, #111118 0%, rgba(17, 17, 24, 0.92) 100%);
+        backdrop-filter: blur(10px);
+      }
+
+      .tabBtn {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        padding: 10px 6px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .tabBtn.active {
+        background: #ffcc4d;
+        color: #1c1c1c;
+        border-color: #ffcc4d;
+      }
+
+      .tabPanel {
+        display: none;
+      }
+
+      .tabPanel.active {
+        display: block;
+      }
+
+      .panelHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .panelHeader h2 {
+        margin: 0;
+      }
+
+      .summaryPill {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+
       .small {
         font-size: 13px;
         opacity: 0.7;
@@ -248,33 +311,49 @@
       <div class="character" id="clickButton">🥴</div>
       <div class="event" id="eventText"></div>
 
-      <div class="panel">
-        <h2>Быстрые действия</h2>
+      <div class="tabs" aria-label="Разделы игры">
+        <button class="tabBtn active" data-tab="actions">Главное</button>
+        <button class="tabBtn" data-tab="clicks">Клик</button>
+        <button class="tabBtn" data-tab="business">Бизнес</button>
+        <button class="tabBtn" data-tab="quests">Задания</button>
+      </div>
+
+      <div class="panel tabPanel active" id="tab-actions">
+        <div class="panelHeader">
+          <h2>Быстрые действия</h2>
+          <span class="summaryPill" id="mainSummary">Старт района</span>
+        </div>
         <button class="btn" id="boostButton">Мем-буст x2 на 30 сек</button>
         <button class="btn" id="dailyButton">Забрать ежедневный бонус</button>
         <button class="btn secondary" id="shareButton">Позвать друга</button>
+        <button class="btn secondary" id="resetButton">Сбросить прогресс</button>
+        <p class="small">
+          Район ждёт легенду. Разделы вынесены во вкладки, чтобы не было огромного скролла.
+        </p>
       </div>
 
-      <div class="panel">
-        <h2>Апгрейды клика</h2>
+      <div class="panel tabPanel" id="tab-clicks">
+        <div class="panelHeader">
+          <h2>Апгрейды клика</h2>
+          <span class="summaryPill" id="clickSummary">0 ур.</span>
+        </div>
         <div class="shopGrid" id="clickShop"></div>
       </div>
 
-      <div class="panel">
-        <h2>Бизнесы</h2>
+      <div class="panel tabPanel" id="tab-business">
+        <div class="panelHeader">
+          <h2>Бизнесы</h2>
+          <span class="summaryPill" id="businessSummary">0 ур.</span>
+        </div>
         <div class="shopGrid" id="businessShop"></div>
       </div>
 
-      <div class="panel">
-        <h2>Задания района</h2>
+      <div class="panel tabPanel" id="tab-quests">
+        <div class="panelHeader">
+          <h2>Задания района</h2>
+          <span class="summaryPill" id="questsSummary">0 выполнено</span>
+        </div>
         <div class="questsList" id="questsList"></div>
-      </div>
-
-      <div class="panel">
-        <button class="btn secondary" id="resetButton">Сбросить прогресс</button>
-        <p class="small">
-          Район ждёт легенду. Дальше добавим коллекции, рейтинг и кланы.
-        </p>
       </div>
     </div>
 
@@ -486,6 +565,12 @@
       const clickShop = document.getElementById("clickShop");
       const businessShop = document.getElementById("businessShop");
       const questsList = document.getElementById("questsList");
+      const tabButtons = document.querySelectorAll(".tabBtn");
+      const tabPanels = document.querySelectorAll(".tabPanel");
+      const mainSummary = document.getElementById("mainSummary");
+      const clickSummary = document.getElementById("clickSummary");
+      const businessSummary = document.getElementById("businessSummary");
+      const questsSummary = document.getElementById("questsSummary");
 
       const telegramUser = tg?.initDataUnsafe?.user;
 
@@ -493,11 +578,26 @@
         subtitleEl.textContent = `${telegramUser.first_name}, кликай и стань легендой района.`;
       }
 
+      setupTabs();
       applyMigration();
       renderShop();
       renderQuests();
       applyOfflineProgress();
       updateUI();
+
+      function setupTabs() {
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const tabName = button.dataset.tab;
+
+            tabButtons.forEach((item) => item.classList.remove("active"));
+            tabPanels.forEach((panel) => panel.classList.remove("active"));
+
+            button.classList.add("active");
+            document.getElementById(`tab-${tabName}`).classList.add("active");
+          });
+        });
+      }
 
       function loadGame() {
         const saved = localStorage.getItem(SAVE_KEY);
@@ -689,6 +789,23 @@
         }
 
         return 1;
+      }
+
+      function updateSummaries() {
+        const clickLevels = getTotalUpgradeLevel(clickUpgrades);
+        const businessLevels = getTotalUpgradeLevel(businessUpgrades);
+        const completedQuests = quests.filter((quest) => state.claimedQuests[quest.id]).length;
+        const readyQuests = quests.filter((quest) => {
+          const progress = Math.min(quest.getProgress(), quest.target);
+          return progress >= quest.target && !state.claimedQuests[quest.id];
+        }).length;
+
+        mainSummary.textContent = `${formatMoney(getPerClick())}/клик · ${formatMoney(getPerSecond())}/сек`;
+        clickSummary.textContent = `${clickLevels} ур.`;
+        businessSummary.textContent = `${businessLevels} ур.`;
+        questsSummary.textContent = readyQuests > 0
+          ? `${readyQuests} забрать`
+          : `${completedQuests}/${quests.length} выполнено`;
       }
 
       function renderShop() {
