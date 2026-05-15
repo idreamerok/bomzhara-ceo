@@ -7,6 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -17,96 +21,42 @@
       }
 
       .game {
-        max-width: 480px;
+        max-width: 520px;
         margin: 0 auto;
-        padding: 20px;
+        padding: 18px;
       }
 
       h1 {
-        margin-top: 10px;
+        margin: 10px 0 6px;
         font-size: 32px;
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        text-align: left;
       }
 
       .subtitle {
         opacity: 0.8;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
       }
 
       .money {
-        font-size: 36px;
+        font-size: 38px;
         font-weight: bold;
-        margin: 20px 0 5px;
+        margin: 18px 0 5px;
       }
 
       .income {
         opacity: 0.8;
-        margin-bottom: 20px;
-      }
-
-      .character {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: radial-gradient(circle, #ffce73, #d88a22);
-        margin: 20px auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 80px;
-        box-shadow: 0 10px 0 #8d5415;
-        cursor: pointer;
-        transition:
-          transform 0.08s,
-          box-shadow 0.08s;
-      }
-
-      .character:active {
-        transform: translateY(8px) scale(0.97);
-        box-shadow: 0 2px 0 #8d5415;
-      }
-
-      .btn {
-        width: 100%;
-        border: none;
-        border-radius: 14px;
-        padding: 14px;
-        margin: 8px 0;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        background: #ffcc4d;
-        color: #1c1c1c;
-      }
-
-      .btn:disabled {
-        background: #555;
-        color: #aaa;
-        cursor: not-allowed;
-      }
-
-      .panel {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 15px;
-        margin-top: 20px;
-      }
-
-      .small {
-        font-size: 13px;
-        opacity: 0.7;
-      }
-
-      .event {
-        min-height: 22px;
-        margin-top: 15px;
-        color: #ffcc4d;
-        font-weight: bold;
+        margin-bottom: 14px;
       }
 
       .rank {
         display: inline-block;
         padding: 8px 14px;
-        margin: 10px 0 8px;
+        margin: 8px 0;
         border-radius: 999px;
         background: rgba(255, 204, 77, 0.14);
         color: #ffcc4d;
@@ -137,61 +87,143 @@
         margin-bottom: 12px;
       }
 
-      .panelTitle {
-        margin: 0 0 12px;
-        font-size: 18px;
-      }
-
-      .questsPanel {
-        text-align: left;
-      }
-
-      .questItem {
+      .character {
+        width: 178px;
+        height: 178px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #ffce73, #d88a22);
+        margin: 18px auto;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        justify-content: center;
+        font-size: 80px;
+        box-shadow: 0 10px 0 #8d5415;
+        cursor: pointer;
+        transition:
+          transform 0.08s,
+          box-shadow 0.08s;
       }
 
-      .questItem:last-child {
-        border-bottom: none;
+      .character:active {
+        transform: translateY(8px) scale(0.97);
+        box-shadow: 0 2px 0 #8d5415;
       }
 
-      .questTitle {
-        font-weight: bold;
-        font-size: 14px;
-      }
-
-      .questProgress {
-        margin-top: 4px;
-        font-size: 12px;
-        opacity: 0.72;
-      }
-
-      .questReward {
-        margin-top: 4px;
-        font-size: 12px;
+      .event {
+        min-height: 24px;
+        margin: 10px 0 14px;
         color: #ffcc4d;
+        font-weight: bold;
       }
 
-      .questBtn {
-        min-width: 92px;
+      .panel {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 15px;
+        margin-top: 14px;
+      }
+
+      .btn {
+        width: 100%;
         border: none;
-        border-radius: 12px;
-        padding: 9px 10px;
-        font-size: 13px;
+        border-radius: 14px;
+        padding: 14px;
+        margin: 8px 0;
+        font-size: 16px;
         font-weight: bold;
         cursor: pointer;
         background: #ffcc4d;
         color: #1c1c1c;
       }
 
-      .questBtn:disabled {
+      .btn:disabled {
         background: #555;
         color: #aaa;
         cursor: not-allowed;
+      }
+
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.14);
+        color: white;
+      }
+
+      .shopGrid,
+      .questsList {
+        display: grid;
+        gap: 10px;
+      }
+
+      .upgradeCard,
+      .questCard {
+        text-align: left;
+        background: rgba(0, 0, 0, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 12px;
+      }
+
+      .cardTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .cardTitle {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 4px;
+      }
+
+      .cardDesc,
+      .questProgressText {
+        font-size: 13px;
+        opacity: 0.78;
+        line-height: 1.35;
+      }
+
+      .levelBadge,
+      .questBadge {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: rgba(255, 204, 77, 0.13);
+        color: #ffcc4d;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .buyBtn,
+      .claimBtn {
+        margin-top: 10px;
+        padding: 11px 12px;
+        font-size: 14px;
+      }
+
+      .questProgressWrap {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 9px;
+      }
+
+      .questProgressBar {
+        height: 100%;
+        background: #ffcc4d;
+        border-radius: 999px;
+        transition: width 0.2s ease;
+      }
+
+      .questDone {
+        border-color: rgba(255, 204, 77, 0.45);
+      }
+
+      .small {
+        font-size: 13px;
+        opacity: 0.7;
+        line-height: 1.4;
       }
     </style>
   </head>
@@ -210,39 +242,38 @@
       </div>
 
       <div class="progressText" id="progressText">
-        До уровня “Сборщик мелочи”: 100 ₽
+        До уровня “Сборщик мелочи”: 500 ₽
       </div>
 
       <div class="character" id="clickButton">🥴</div>
-
       <div class="event" id="eventText"></div>
 
-      <div class="panel questsPanel">
-        <h2 class="panelTitle">Задания района</h2>
+      <div class="panel">
+        <h2>Быстрые действия</h2>
+        <button class="btn" id="boostButton">Мем-буст x2 на 30 сек</button>
+        <button class="btn" id="dailyButton">Забрать ежедневный бонус</button>
+        <button class="btn secondary" id="shareButton">Позвать друга</button>
+      </div>
+
+      <div class="panel">
+        <h2>Апгрейды клика</h2>
+        <div class="shopGrid" id="clickShop"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Бизнесы</h2>
+        <div class="shopGrid" id="businessShop"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Задания района</h2>
         <div class="questsList" id="questsList"></div>
       </div>
 
       <div class="panel">
-        <button class="btn" id="upgradeClick">
-          Купить “Рваный стаканчик” — 25 ₽
-        </button>
-
-        <button class="btn" id="upgradeAuto">
-          Купить “Шаурма-точку” — 100 ₽
-        </button>
-
-        <button class="btn" id="boostButton">
-          Мем-буст x2 на 30 сек — 250 ₽
-        </button>
-
-        <button class="btn" id="dailyButton">Забрать ежедневный бонус</button>
-
-        <button class="btn" id="shareButton">Позвать друга</button>
-
-        <button class="btn" id="resetButton">Сбросить прогресс</button>
-
+        <button class="btn secondary" id="resetButton">Сбросить прогресс</button>
         <p class="small">
-          Район ждёт легенду. Выполняй задания, расти и готовься к рейтингу.
+          Район ждёт легенду. Дальше добавим коллекции, рейтинг и кланы.
         </p>
       </div>
     </div>
@@ -255,118 +286,282 @@
         tg.expand();
       }
 
-      const telegramUser = tg?.initDataUnsafe?.user;
-
-      if (telegramUser?.first_name) {
-        setTimeout(() => {
-          subtitleEl.textContent = `${telegramUser.first_name}, кликай и стань легендой района.`;
-        }, 0);
-      }
+      const SAVE_KEY = "bomzhara_ceo_save";
 
       const defaultState = {
         money: 0,
         totalEarned: 0,
-        totalClicks: 0,
-        dailyBonusClaims: 0,
-        sharesCount: 0,
-        claimedQuests: [],
-        perClick: 1,
-        perSecond: 0,
-        clickUpgradeLevel: 0,
-        autoUpgradeLevel: 0,
-        clickUpgradeCost: 25,
-        autoUpgradeCost: 100,
         boostActive: false,
         boostEndTime: 0,
         lastSaveTime: Date.now(),
         dailyBonusLastClaim: 0,
+        upgrades: {},
+        claimedQuests: {},
+        stats: {
+          clickCount: 0,
+          dailyClaimCount: 0,
+          shareCount: 0,
+          clickUpgradePurchases: 0,
+          businessUpgradePurchases: 0,
+        },
       };
-
-      let state = loadGame();
-
-      if (!state.totalEarned || state.totalEarned < state.money) {
-        state.totalEarned = state.money;
-      }
 
       const ranks = [
         { title: "Бомж района", need: 0 },
-        { title: "Сборщик мелочи", need: 100 },
-        { title: "Шаурма-стажёр", need: 500 },
-        { title: "Дворовый бизнесмен", need: 2_000 },
-        { title: "Шаурма-магнат", need: 10_000 },
-        { title: "Олигарх района", need: 50_000 },
-        { title: "Легенда района", need: 250_000 },
+        { title: "Сборщик мелочи", need: 500 },
+        { title: "Шаурма-стажёр", need: 5_000 },
+        { title: "Дворовый бизнесмен", need: 25_000 },
+        { title: "Шаурма-магнат", need: 150_000 },
+        { title: "Олигарх района", need: 750_000 },
+        { title: "Легенда района", need: 5_000_000 },
+      ];
+
+      const clickUpgrades = [
+        {
+          id: "raggedCup",
+          title: "Рваный стаканчик",
+          description: "+1 ₽ за клик за каждый уровень",
+          baseCost: 40,
+          costMultiplier: 1.95,
+          effectPerLevel: 1,
+        },
+        {
+          id: "ceoSign",
+          title: "Табличка “Помогите CEO”",
+          description: "+5 ₽ за клик за каждый уровень",
+          baseCost: 280,
+          costMultiplier: 2.05,
+          effectPerLevel: 5,
+        },
+        {
+          id: "districtCharisma",
+          title: "Харизма района",
+          description: "+18 ₽ за клик за каждый уровень",
+          baseCost: 1_800,
+          costMultiplier: 2.15,
+          effectPerLevel: 18,
+        },
+        {
+          id: "successCourse",
+          title: "Курсы успеха",
+          description: "+75 ₽ за клик за каждый уровень",
+          baseCost: 12_000,
+          costMultiplier: 2.25,
+          effectPerLevel: 75,
+        },
+        {
+          id: "investorPitch",
+          title: "Питч инвестору",
+          description: "+320 ₽ за клик за каждый уровень",
+          baseCost: 95_000,
+          costMultiplier: 2.35,
+          effectPerLevel: 320,
+        },
+      ];
+
+      const businessUpgrades = [
+        {
+          id: "shawarmaPoint",
+          title: "Шаурма-точка",
+          description: "+3 ₽/сек за каждый уровень",
+          baseCost: 180,
+          costMultiplier: 1.95,
+          effectPerLevel: 3,
+        },
+        {
+          id: "metroKiosk",
+          title: "Ларёк у метро",
+          description: "+18 ₽/сек за каждый уровень",
+          baseCost: 1_600,
+          costMultiplier: 2.08,
+          effectPerLevel: 18,
+        },
+        {
+          id: "miniBusiness",
+          title: "Мини-бизнес",
+          description: "+95 ₽/сек за каждый уровень",
+          baseCost: 14_000,
+          costMultiplier: 2.16,
+          effectPerLevel: 95,
+        },
+        {
+          id: "shawarmaNetwork",
+          title: "Сеть шаурмы",
+          description: "+520 ₽/сек за каждый уровень",
+          baseCost: 110_000,
+          costMultiplier: 2.28,
+          effectPerLevel: 520,
+        },
+        {
+          id: "districtEmpire",
+          title: "Районная империя",
+          description: "+3 000 ₽/сек за каждый уровень",
+          baseCost: 850_000,
+          costMultiplier: 2.4,
+          effectPerLevel: 3_000,
+        },
       ];
 
       const quests = [
         {
-          id: "click_50",
-          title: "Сделать 50 кликов",
-          type: "clicks",
-          target: 50,
-          reward: 150,
+          id: "click250",
+          title: "Разогреть палец",
+          description: "Сделай 250 кликов",
+          target: 250,
+          reward: 900,
+          getProgress: () => state.stats.clickCount,
         },
         {
-          id: "click_upgrade_3",
-          title: "Купить 3 улучшения клика",
-          type: "clickUpgrades",
+          id: "click1000",
+          title: "Кликер района",
+          description: "Сделай 1 000 кликов",
+          target: 1_000,
+          reward: 5_000,
+          getProgress: () => state.stats.clickCount,
+        },
+        {
+          id: "earn10000",
+          title: "Первые серьёзные деньги",
+          description: "Заработай всего 10 000 ₽",
+          target: 10_000,
+          reward: 7_500,
+          getProgress: () => state.totalEarned,
+        },
+        {
+          id: "clickUpgrades10",
+          title: "Прокачать харизму",
+          description: "Купи 10 апгрейдов клика суммарно",
+          target: 10,
+          reward: 8_000,
+          getProgress: () => getTotalUpgradeLevel(clickUpgrades),
+        },
+        {
+          id: "businessUpgrades8",
+          title: "Бизнес пахнет шаурмой",
+          description: "Купи 8 бизнес-апгрейдов суммарно",
+          target: 8,
+          reward: 12_000,
+          getProgress: () => getTotalUpgradeLevel(businessUpgrades),
+        },
+        {
+          id: "daily3",
+          title: "Возвращайся в район",
+          description: "Забери ежедневный бонус 3 раза",
           target: 3,
-          reward: 300,
+          reward: 35_000,
+          getProgress: () => state.stats.dailyClaimCount,
         },
         {
-          id: "auto_upgrade_2",
-          title: "Купить 2 шаурма-точки",
-          type: "autoUpgrades",
-          target: 2,
-          reward: 450,
+          id: "share3",
+          title: "Позови банду",
+          description: "Позови друга 3 раза",
+          target: 3,
+          reward: 10_000,
+          getProgress: () => state.stats.shareCount,
         },
         {
-          id: "daily_1",
-          title: "Забрать ежедневный бонус",
-          type: "dailyClaims",
-          target: 1,
-          reward: 250,
-        },
-        {
-          id: "share_1",
-          title: "Позвать друга",
-          type: "shares",
-          target: 1,
-          reward: 500,
+          id: "rankBusinessman",
+          title: "Стать дворовым бизнесменом",
+          description: "Достигни ранга “Дворовый бизнесмен”",
+          target: 25_000,
+          reward: 25_000,
+          getProgress: () => state.totalEarned,
         },
       ];
+
+      let state = loadGame();
+
       const moneyEl = document.getElementById("money");
       const incomeEl = document.getElementById("income");
       const rankText = document.getElementById("rankText");
       const progressBar = document.getElementById("progressBar");
       const progressText = document.getElementById("progressText");
-      const questsList = document.getElementById("questsList");
       const clickButton = document.getElementById("clickButton");
-      const upgradeClick = document.getElementById("upgradeClick");
-      const upgradeAuto = document.getElementById("upgradeAuto");
       const boostButton = document.getElementById("boostButton");
       const dailyButton = document.getElementById("dailyButton");
       const shareButton = document.getElementById("shareButton");
       const resetButton = document.getElementById("resetButton");
       const eventText = document.getElementById("eventText");
       const subtitleEl = document.querySelector(".subtitle");
+      const clickShop = document.getElementById("clickShop");
+      const businessShop = document.getElementById("businessShop");
+      const questsList = document.getElementById("questsList");
+
+      const telegramUser = tg?.initDataUnsafe?.user;
+
+      if (telegramUser?.first_name) {
+        subtitleEl.textContent = `${telegramUser.first_name}, кликай и стань легендой района.`;
+      }
+
+      applyMigration();
+      renderShop();
+      renderQuests();
+      applyOfflineProgress();
+      updateUI();
 
       function loadGame() {
-        const saved = localStorage.getItem("bomzhara_ceo_save");
+        const saved = localStorage.getItem(SAVE_KEY);
 
         if (!saved) {
-          return { ...defaultState };
+          return structuredClone(defaultState);
         }
 
+        try {
+          return mergeState(structuredClone(defaultState), JSON.parse(saved));
+        } catch (error) {
+          console.warn("Save loading error", error);
+          return structuredClone(defaultState);
+        }
+      }
+
+      function mergeState(base, saved) {
         return {
-          ...defaultState,
-          ...JSON.parse(saved),
+          ...base,
+          ...saved,
+          upgrades: {
+            ...base.upgrades,
+            ...(saved.upgrades || {}),
+          },
+          claimedQuests: {
+            ...base.claimedQuests,
+            ...(saved.claimedQuests || {}),
+          },
+          stats: {
+            ...base.stats,
+            ...(saved.stats || {}),
+          },
         };
+      }
+
+      function applyMigration() {
+        if (!state.totalEarned || state.totalEarned < state.money) {
+          state.totalEarned = state.money;
+        }
+
+        if (!state.upgrades.raggedCup && state.clickUpgradeLevel > 0) {
+          state.upgrades.raggedCup = state.clickUpgradeLevel;
+        }
+
+        if (!state.upgrades.shawarmaPoint && state.autoUpgradeLevel > 0) {
+          state.upgrades.shawarmaPoint = state.autoUpgradeLevel;
+        }
+
+        state.stats.clickUpgradePurchases = Math.max(
+          state.stats.clickUpgradePurchases || 0,
+          state.clickUpgradeLevel || 0,
+        );
+
+        state.stats.businessUpgradePurchases = Math.max(
+          state.stats.businessUpgradePurchases || 0,
+          state.autoUpgradeLevel || 0,
+        );
       }
 
       function saveGame() {
         state.lastSaveTime = Date.now();
-        localStorage.setItem("bomzhara_ceo_save", JSON.stringify(state));
+        state.perClick = getPerClick();
+        state.perSecond = getPerSecond();
+        localStorage.setItem(SAVE_KEY, JSON.stringify(state));
       }
 
       function formatMoney(value) {
@@ -376,6 +571,42 @@
           return (value / 1_000_000).toFixed(1) + " млн ₽";
         if (value >= 1_000) return (value / 1_000).toFixed(1) + " тыс ₽";
         return Math.floor(value) + " ₽";
+      }
+
+      function getUpgradeLevel(upgradeId) {
+        return state.upgrades[upgradeId] || 0;
+      }
+
+      function getUpgradeCost(upgrade) {
+        const level = getUpgradeLevel(upgrade.id);
+        return Math.floor(upgrade.baseCost * upgrade.costMultiplier ** level);
+      }
+
+      function getTotalUpgradeLevel(upgrades) {
+        return upgrades.reduce((sum, upgrade) => sum + getUpgradeLevel(upgrade.id), 0);
+      }
+
+      function getPerClick() {
+        return 1 + clickUpgrades.reduce(
+          (sum, upgrade) => sum + getUpgradeLevel(upgrade.id) * upgrade.effectPerLevel,
+          0,
+        );
+      }
+
+      function getPerSecond() {
+        return businessUpgrades.reduce(
+          (sum, upgrade) => sum + getUpgradeLevel(upgrade.id) * upgrade.effectPerLevel,
+          0,
+        );
+      }
+
+      function addMoney(amount) {
+        state.money += amount;
+        state.totalEarned += amount;
+      }
+
+      function spendMoney(amount) {
+        state.money -= amount;
       }
 
       function getCurrentRank() {
@@ -424,103 +655,20 @@
         )}`;
       }
 
-      function getQuestProgress(quest) {
-        if (quest.type === "clicks") return state.totalClicks;
-        if (quest.type === "clickUpgrades") return state.clickUpgradeLevel;
-        if (quest.type === "autoUpgrades") return state.autoUpgradeLevel;
-        if (quest.type === "dailyClaims") return state.dailyBonusClaims;
-        if (quest.type === "shares") return state.sharesCount;
-
-        return 0;
-      }
-
-      function isQuestClaimed(questId) {
-        return state.claimedQuests.includes(questId);
-      }
-
-      function claimQuestReward(questId) {
-        const quest = quests.find((item) => item.id === questId);
-
-        if (!quest || isQuestClaimed(quest.id)) return;
-
-        const progress = getQuestProgress(quest);
-
-        if (progress < quest.target) return;
-
-        state.money += quest.reward;
-        state.totalEarned += quest.reward;
-        state.claimedQuests.push(quest.id);
-
-        tg?.HapticFeedback?.notificationOccurred?.("success");
-
-        showFloatingText(`Задание выполнено: +${formatMoney(quest.reward)}`);
-        updateUI();
-      }
-
-      function updateQuestsUI() {
-        questsList.innerHTML = "";
-
-        for (const quest of quests) {
-          const progress = Math.min(getQuestProgress(quest), quest.target);
-          const claimed = isQuestClaimed(quest.id);
-          const completed = progress >= quest.target;
-
-          const questItem = document.createElement("div");
-          questItem.className = "questItem";
-
-          const questInfo = document.createElement("div");
-
-          const questTitle = document.createElement("div");
-          questTitle.className = "questTitle";
-          questTitle.textContent = quest.title;
-
-          const questProgress = document.createElement("div");
-          questProgress.className = "questProgress";
-          questProgress.textContent = `Прогресс: ${progress}/${quest.target}`;
-
-          const questReward = document.createElement("div");
-          questReward.className = "questReward";
-          questReward.textContent = `Награда: ${formatMoney(quest.reward)}`;
-
-          questInfo.appendChild(questTitle);
-          questInfo.appendChild(questProgress);
-          questInfo.appendChild(questReward);
-
-          const questButton = document.createElement("button");
-          questButton.className = "questBtn";
-
-          if (claimed) {
-            questButton.textContent = "Забрано";
-            questButton.disabled = true;
-          } else if (completed) {
-            questButton.textContent = "Забрать";
-            questButton.disabled = false;
-            questButton.addEventListener("click", () => claimQuestReward(quest.id));
-          } else {
-            questButton.textContent = "В процессе";
-            questButton.disabled = true;
-          }
-
-          questItem.appendChild(questInfo);
-          questItem.appendChild(questButton);
-          questsList.appendChild(questItem);
-        }
-      }
-
       function applyOfflineProgress() {
         const now = Date.now();
         const awaySeconds = Math.floor((now - state.lastSaveTime) / 1000);
+        const perSecond = getPerSecond();
 
-        if (awaySeconds < 10 || state.perSecond <= 0) {
+        if (awaySeconds < 10 || perSecond <= 0) {
           return;
         }
 
         const maxOfflineSeconds = 60 * 60 * 3;
         const countedSeconds = Math.min(awaySeconds, maxOfflineSeconds);
-        const earned = countedSeconds * state.perSecond;
+        const earned = countedSeconds * perSecond;
 
-        state.money += earned;
-        state.totalEarned += earned;
+        addMoney(earned);
 
         setTimeout(() => {
           showFloatingText(`Пока тебя не было: +${formatMoney(earned)}`);
@@ -543,23 +691,161 @@
         return 1;
       }
 
+      function renderShop() {
+        renderUpgradeGroup(clickShop, clickUpgrades, "click");
+        renderUpgradeGroup(businessShop, businessUpgrades, "business");
+      }
+
+      function renderUpgradeGroup(container, upgrades, type) {
+        container.innerHTML = "";
+
+        for (const upgrade of upgrades) {
+          const card = document.createElement("div");
+          card.className = "upgradeCard";
+          card.innerHTML = `
+            <div class="cardTop">
+              <div>
+                <div class="cardTitle">${upgrade.title}</div>
+                <div class="cardDesc">${upgrade.description}</div>
+              </div>
+              <div class="levelBadge" id="level-${upgrade.id}">ур. 0</div>
+            </div>
+            <button class="btn buyBtn" id="buy-${upgrade.id}">Купить</button>
+          `;
+
+          container.appendChild(card);
+
+          document
+            .getElementById(`buy-${upgrade.id}`)
+            .addEventListener("click", () => buyUpgrade(upgrade, type));
+        }
+      }
+
+      function buyUpgrade(upgrade, type) {
+        const cost = getUpgradeCost(upgrade);
+
+        if (state.money < cost) {
+          return;
+        }
+
+        spendMoney(cost);
+        state.upgrades[upgrade.id] = getUpgradeLevel(upgrade.id) + 1;
+
+        if (type === "click") {
+          state.stats.clickUpgradePurchases += 1;
+          showFloatingText(`${upgrade.title}: клик стал сильнее.`);
+        } else {
+          state.stats.businessUpgradePurchases += 1;
+          showFloatingText(`${upgrade.title}: пассивный доход вырос.`);
+        }
+
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        updateUI();
+      }
+
+      function updateShopUI() {
+        for (const upgrade of [...clickUpgrades, ...businessUpgrades]) {
+          const level = getUpgradeLevel(upgrade.id);
+          const cost = getUpgradeCost(upgrade);
+          const levelEl = document.getElementById(`level-${upgrade.id}`);
+          const buyBtn = document.getElementById(`buy-${upgrade.id}`);
+
+          levelEl.textContent = `ур. ${level}`;
+          buyBtn.textContent = `Купить — ${formatMoney(cost)}`;
+          buyBtn.disabled = state.money < cost;
+        }
+      }
+
+      function renderQuests() {
+        questsList.innerHTML = "";
+
+        for (const quest of quests) {
+          const card = document.createElement("div");
+          card.className = "questCard";
+          card.id = `quest-${quest.id}`;
+          card.innerHTML = `
+            <div class="cardTop">
+              <div>
+                <div class="cardTitle">${quest.title}</div>
+                <div class="cardDesc">${quest.description}</div>
+              </div>
+              <div class="questBadge">+${formatMoney(quest.reward)}</div>
+            </div>
+            <div class="questProgressText" id="quest-text-${quest.id}"></div>
+            <div class="questProgressWrap">
+              <div class="questProgressBar" id="quest-bar-${quest.id}"></div>
+            </div>
+            <button class="btn claimBtn" id="claim-${quest.id}">Забрать</button>
+          `;
+
+          questsList.appendChild(card);
+
+          document
+            .getElementById(`claim-${quest.id}`)
+            .addEventListener("click", () => claimQuest(quest));
+        }
+      }
+
+      function updateQuestsUI() {
+        for (const quest of quests) {
+          const progress = Math.min(quest.getProgress(), quest.target);
+          const isComplete = progress >= quest.target;
+          const isClaimed = Boolean(state.claimedQuests[quest.id]);
+          const percent = Math.min(100, (progress / quest.target) * 100);
+
+          const card = document.getElementById(`quest-${quest.id}`);
+          const text = document.getElementById(`quest-text-${quest.id}`);
+          const bar = document.getElementById(`quest-bar-${quest.id}`);
+          const button = document.getElementById(`claim-${quest.id}`);
+
+          card.classList.toggle("questDone", isComplete && !isClaimed);
+          text.textContent = `${formatMoney(progress).replace(" ₽", "")} / ${formatMoney(
+            quest.target,
+          ).replace(" ₽", "")}`;
+          bar.style.width = `${percent}%`;
+
+          if (isClaimed) {
+            button.textContent = "Получено";
+            button.disabled = true;
+          } else if (isComplete) {
+            button.textContent = `Забрать +${formatMoney(quest.reward)}`;
+            button.disabled = false;
+          } else {
+            button.textContent = "Не выполнено";
+            button.disabled = true;
+          }
+        }
+      }
+
+      function claimQuest(quest) {
+        const progress = quest.getProgress();
+
+        if (progress < quest.target || state.claimedQuests[quest.id]) {
+          return;
+        }
+
+        state.claimedQuests[quest.id] = true;
+        addMoney(quest.reward);
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showFloatingText(`Задание выполнено: +${formatMoney(quest.reward)}`);
+        updateUI();
+      }
+
       function updateUI() {
         const boost = getBoostMultiplier();
+        const perClick = getPerClick();
+        const perSecond = getPerSecond();
 
         moneyEl.textContent = formatMoney(state.money);
-        incomeEl.textContent = `+${formatMoney(state.perSecond * boost)}/сек · +${formatMoney(state.perClick * boost)}/клик`;
-
-        upgradeClick.textContent = `Купить “Рваный стаканчик” ур. ${state.clickUpgradeLevel + 1} — ${formatMoney(state.clickUpgradeCost)}`;
-
-        upgradeAuto.textContent = `Купить “Шаурма-точку” ур. ${state.autoUpgradeLevel + 1} — ${formatMoney(state.autoUpgradeCost)}`;
+        incomeEl.textContent = `+${formatMoney(perSecond * boost)}/сек · +${formatMoney(
+          perClick * boost,
+        )}/клик`;
 
         boostButton.textContent = state.boostActive
           ? "Мем-буст уже активен"
-          : "Мем-буст x2 на 30 сек — 250 ₽";
+          : "Мем-буст x2 на 30 сек — 1 500 ₽";
+        boostButton.disabled = state.money < 1_500 || state.boostActive;
 
-        upgradeClick.disabled = state.money < state.clickUpgradeCost;
-        upgradeAuto.disabled = state.money < state.autoUpgradeCost;
-        boostButton.disabled = state.money < 250 || state.boostActive;
         const now = Date.now();
         const oneDay = 24 * 60 * 60 * 1000;
         const dailyReady = now - state.dailyBonusLastClaim >= oneDay;
@@ -568,8 +854,10 @@
         dailyButton.textContent = dailyReady
           ? "Забрать ежедневный бонус"
           : "Ежедневный бонус уже забран";
-        updateQuestsUI();
+
         updateRankUI();
+        updateShopUI();
+        updateQuestsUI();
         saveGame();
       }
 
@@ -585,43 +873,18 @@
       clickButton.addEventListener("click", () => {
         tg?.HapticFeedback?.impactOccurred?.("light");
 
-        const gain = state.perClick * getBoostMultiplier();
-        state.totalClicks += 1;
-        state.money += gain;
-        state.totalEarned += gain;
+        const gain = getPerClick() * getBoostMultiplier();
+        addMoney(gain);
+        state.stats.clickCount += 1;
 
         showFloatingText(`+${formatMoney(gain)}. Улица уважает тебя.`);
         updateUI();
       });
 
-      upgradeClick.addEventListener("click", () => {
-        if (state.money < state.clickUpgradeCost) return;
-
-        state.money -= state.clickUpgradeCost;
-        state.clickUpgradeLevel += 1;
-        state.perClick += 1 + state.clickUpgradeLevel;
-        state.clickUpgradeCost = Math.floor(state.clickUpgradeCost * 1.7);
-
-        showFloatingText("Стаканчик прокачан. Доход с клика вырос.");
-        updateUI();
-      });
-
-      upgradeAuto.addEventListener("click", () => {
-        if (state.money < state.autoUpgradeCost) return;
-
-        state.money -= state.autoUpgradeCost;
-        state.autoUpgradeLevel += 1;
-        state.perSecond += 3 + state.autoUpgradeLevel * 2;
-        state.autoUpgradeCost = Math.floor(state.autoUpgradeCost * 1.85);
-
-        showFloatingText("Шаурма-точка открыта. Деньги капают сами.");
-        updateUI();
-      });
-
       boostButton.addEventListener("click", () => {
-        if (state.money < 250 || state.boostActive) return;
+        if (state.money < 1_500 || state.boostActive) return;
 
-        state.money -= 250;
+        spendMoney(1_500);
         state.boostActive = true;
         state.boostEndTime = Date.now() + 30_000;
 
@@ -637,30 +900,26 @@
           return;
         }
 
-        const bonus =
-          500 + state.clickUpgradeLevel * 50 + state.autoUpgradeLevel * 100;
+        const bonus = 1_500 + getTotalUpgradeLevel(clickUpgrades) * 150 + getTotalUpgradeLevel(businessUpgrades) * 250;
 
-        state.money += bonus;
-        state.totalEarned += bonus;
-        state.dailyBonusClaims += 1;
+        addMoney(bonus);
         state.dailyBonusLastClaim = now;
+        state.stats.dailyClaimCount += 1;
 
         tg?.HapticFeedback?.notificationOccurred?.("success");
-
         showFloatingText(`Ежедневный бонус: +${formatMoney(bonus)}`);
         updateUI();
       });
 
       shareButton.addEventListener("click", () => {
-        state.sharesCount += 1;
-        updateUI();
+        state.stats.shareCount += 1;
+        saveGame();
+        updateQuestsUI();
 
         const text = encodeURIComponent(
           `Я уже строю империю в “Бомжара CEO” 🥴\nСможешь обогнать меня?`,
         );
-
         const url = encodeURIComponent("https://t.me/bomzhara_ceo_bot");
-
         const shareUrl = `https://t.me/share/url?url=${url}&text=${text}`;
 
         if (tg?.openTelegramLink) {
@@ -674,19 +933,20 @@
         const confirmed = confirm("Точно сбросить прогресс?");
         if (!confirmed) return;
 
-        state = { ...defaultState };
+        state = structuredClone(defaultState);
         saveGame();
+        renderQuests();
         updateUI();
       });
 
       setInterval(() => {
         const boost = getBoostMultiplier();
-        const passiveGain = state.perSecond * boost;
+        const passiveGain = getPerSecond() * boost;
 
-        state.money += passiveGain;
-        state.totalEarned += passiveGain;
-
-        updateUI();
+        if (passiveGain > 0) {
+          addMoney(passiveGain);
+          updateUI();
+        }
       }, 1000);
 
       setInterval(() => {
@@ -697,19 +957,15 @@
           "Районный инвестор заинтересовался твоим бизнесом.",
         ];
 
-        if (Math.random() < 0.35) {
-          const bonus = 20 + Math.floor(Math.random() * 80);
-          state.money += bonus;
-          state.totalEarned += bonus;
+        if (Math.random() < 0.28) {
+          const bonus = 50 + Math.floor(Math.random() * 150);
+          addMoney(bonus);
           showFloatingText(
             `${events[Math.floor(Math.random() * events.length)]} +${bonus} ₽`,
           );
           updateUI();
         }
-      }, 15000);
-
-      applyOfflineProgress();
-      updateUI();
+      }, 20_000);
     </script>
   </body>
 </html>
