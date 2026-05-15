@@ -221,6 +221,83 @@
       .questTop { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
       .questProgressWrap { height: 7px; margin-top: 8px; }
       .questDone { border-color: rgba(255, 204, 77, 0.55); }
+
+      .districtCard {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(255,204,77,0.12), rgba(255,255,255,0.05));
+        border: 1px solid rgba(255, 204, 77, 0.16);
+        text-align: left;
+      }
+      .districtTop {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: center;
+      }
+      .districtEmoji {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.18);
+        font-size: 24px;
+      }
+      .districtTitle {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+      .districtDesc {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.25;
+        font-weight: 500;
+      }
+      .districtStats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .districtStat {
+        border-radius: 12px;
+        padding: 7px 8px;
+        background: rgba(0, 0, 0, 0.16);
+      }
+      .districtStatLabel {
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 1px;
+      }
+      .districtStatValue {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .districtProgressText {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 7px;
+        font-weight: 500;
+      }
+      .districtProgressWrap {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 6px;
+      }
+      .districtProgressBar {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        border-radius: 999px;
+        transition: width 0.2s ease;
+      }
       .emptyText, .small { font-size: 12px; color: var(--muted); line-height: 1.35; }
       .bottomTabs {
         position: fixed;
@@ -249,6 +326,107 @@
       }
       .tabBtn:active { transform: scale(0.98); filter: brightness(0.96); }
       .tabBtn.active { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
+
+      .dailyStreakCard {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 18px;
+        background: rgba(0, 0, 0, 0.16);
+        border: 1px solid var(--line);
+        text-align: left;
+      }
+      .dailyStreakTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .dailyTitle {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .dailyReward {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .dailyDots {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+      }
+      .dailyDot {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .dailyDot.active { background: var(--accent); }
+      .dailyDot.done { background: rgba(255, 204, 77, 0.45); }
+
+      .onboardingOverlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(10px);
+        z-index: 100;
+      }
+      .onboardingOverlay.visible { display: flex; }
+      .onboardingCard {
+        width: min(420px, 100%);
+        padding: 18px;
+        border-radius: 24px;
+        background: linear-gradient(180deg, #2a2938, #181822);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.46);
+        text-align: left;
+      }
+      .onboardingIcon {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 204, 77, 0.14);
+        color: var(--accent);
+        font-size: 30px;
+        margin-bottom: 12px;
+      }
+      .onboardingTitle {
+        font-size: 22px;
+        font-weight: 750;
+        letter-spacing: -0.2px;
+        margin-bottom: 6px;
+      }
+      .onboardingText {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.45;
+        margin-bottom: 14px;
+      }
+      .onboardingProgress {
+        display: flex;
+        gap: 6px;
+        margin: 12px 0 14px;
+      }
+      .onboardingProgress span {
+        height: 7px;
+        flex: 1;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .onboardingProgress span.active { background: var(--accent); }
+      .onboardingActions {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 8px;
+      }
+
       @media (max-width: 380px) {
         .money { font-size: 30px; }
         .character { width: 126px; height: 126px; font-size: 60px; }
@@ -292,6 +470,40 @@
           <button class="btn secondary" id="shareButton">Позвать друга</button>
           <button class="btn secondary" id="resetButton">Сброс</button>
         </div>
+
+        <div class="dailyStreakCard" aria-label="Ежедневная серия наград">
+          <div class="dailyStreakTop">
+            <div>
+              <div class="dailyTitle" id="dailyTitle">Ежедневная серия</div>
+              <div class="dailyReward" id="dailyRewardText">Забирай награды каждый день</div>
+            </div>
+            <span class="summaryPill" id="dailyDayPill">День 1</span>
+          </div>
+          <div class="dailyDots" id="dailyDots"></div>
+        </div>
+
+        <div class="districtCard" aria-label="Развитие района">
+          <div class="districtTop">
+            <div class="districtEmoji" id="districtEmoji">📦</div>
+            <div>
+              <div class="districtTitle" id="districtTitle">Картонная база</div>
+              <div class="districtDesc" id="districtDesc">Начало пути. Район пока не верит, но смотрит.</div>
+            </div>
+          </div>
+          <div class="districtStats">
+            <div class="districtStat">
+              <div class="districtStatLabel">Клик-уровни</div>
+              <div class="districtStatValue" id="districtClickLevels">0</div>
+            </div>
+            <div class="districtStat">
+              <div class="districtStatLabel">Бизнес-уровни</div>
+              <div class="districtStatValue" id="districtBusinessLevels">0</div>
+            </div>
+          </div>
+          <div class="districtProgressText" id="districtProgressText">До следующего района: 500 ₽</div>
+          <div class="districtProgressWrap"><div class="districtProgressBar" id="districtProgressBar"></div></div>
+        </div>
+
         <div class="activeQuestsList" id="activeQuestsList"></div>
       </div>
 
@@ -320,6 +532,19 @@
       </div>
     </div>
 
+    <div class="onboardingOverlay" id="onboardingOverlay" aria-label="Обучение первого запуска">
+      <div class="onboardingCard">
+        <div class="onboardingIcon" id="onboardingIcon">👆</div>
+        <div class="onboardingTitle" id="onboardingTitle">Добро пожаловать в район</div>
+        <div class="onboardingText" id="onboardingText">Кликай по персонажу, зарабатывай первые деньги и прокачивайся.</div>
+        <div class="onboardingProgress" id="onboardingProgress"></div>
+        <div class="onboardingActions">
+          <button class="btn secondary" id="onboardingSkip">Пропустить</button>
+          <button class="btn" id="onboardingNext">Дальше</button>
+        </div>
+      </div>
+    </div>
+
     <div class="bottomTabs" aria-label="Разделы игры">
       <button class="tabBtn active" data-tab="main">Главное</button>
       <button class="tabBtn" data-tab="clicks">Клик</button>
@@ -337,6 +562,24 @@
       const SAVE_KEY = "bomzhara_ceo_save";
       const BOT_URL = "https://t.me/bomzhara_ceo_bot";
 
+      const dailyRewards = [
+        { day: 1, money: 400, label: "400 ₽" },
+        { day: 2, money: 900, label: "900 ₽" },
+        { day: 3, money: 2_000, label: "2 000 ₽" },
+        { day: 4, money: 4_000, label: "4 000 ₽" },
+        { day: 5, money: 8_000, label: "8 000 ₽" },
+        { day: 6, money: 15_000, label: "15 000 ₽" },
+        { day: 7, money: 35_000, boostSeconds: 60, label: "35 000 ₽ + буст" },
+      ];
+
+      const onboardingSteps = [
+        { icon: "👆", title: "Кликай по персонажу", text: "Каждый тап приносит деньги. Чем выше прокачка клика, тем быстрее растёт баланс." },
+        { icon: "🛒", title: "Покупай апгрейды", text: "Во вкладках “Клик” и “Бизнес” покупай улучшения. Клик даёт быстрый рост, бизнес приносит деньги сам." },
+        { icon: "🎯", title: "Забирай задания", text: "Задания дают крупные награды и подсказывают, что делать дальше. Готовые награды ищи во вкладке “Задания”." },
+        { icon: "🏙️", title: "Развивай район", text: "Ранг и район считаются по общему заработку, поэтому статус не падает после покупок." },
+        { icon: "🎁", title: "Возвращайся каждый день", text: "Ежедневная серия наград растёт до 7 дня. Если пропустить день, серия начнётся заново." },
+      ];
+
       const defaultState = {
         money: 0,
         totalEarned: 0,
@@ -344,6 +587,9 @@
         boostEndTime: 0,
         lastSaveTime: Date.now(),
         dailyBonusLastClaim: 0,
+        dailyStreakDay: 0,
+        dailyLastClaimDate: "",
+        onboardingDone: false,
         upgrades: {},
         claimedQuests: {},
         stats: {
@@ -365,17 +611,27 @@
         { title: "Легенда района", icon: "👑", need: 5_000_000 },
       ];
 
+      const districtStages = [
+        { title: "Картонная база", icon: "📦", need: 0, description: "Начало пути. Район пока не верит, но смотрит." },
+        { title: "Точка у метро", icon: "🚇", need: 500, description: "Первые деньги пошли. Люди начали узнавать тебя." },
+        { title: "Шаурма-угол", icon: "🌯", need: 5_000, description: "Пахнет бизнесом. Район уже обсуждает твой рост." },
+        { title: "Дворовый офис", icon: "🏚️", need: 25_000, description: "У тебя появились система, клиенты и свои правила." },
+        { title: "Сеть района", icon: "🏪", need: 150_000, description: "Теперь работает не только палец, но и вся экономика." },
+        { title: "Империя квартала", icon: "🏙️", need: 750_000, description: "Ты уже не просишь внимания. За тобой наблюдают." },
+        { title: "Легенда города", icon: "👑", need: 5_000_000, description: "Финальная форма. Район стал твоей историей." },
+      ];
+
       const clickUpgrades = [
-        { id: "raggedCup", title: "Рваный стаканчик", description: "Базовая прокачка клика", baseCost: 40, costMultiplier: 1.95, effectPerLevel: 1, effectLabel: "+1/клик" },
-        { id: "ceoSign", title: "Табличка CEO", description: "Прохожие верят в стартап", baseCost: 280, costMultiplier: 2.05, effectPerLevel: 5, effectLabel: "+5/клик" },
-        { id: "districtCharisma", title: "Харизма района", description: "Каждый клик становится весомее", baseCost: 1_800, costMultiplier: 2.15, effectPerLevel: 18, effectLabel: "+18/клик" },
-        { id: "successCourse", title: "Курсы успеха", description: "Инфобизнес работает на тебя", baseCost: 12_000, costMultiplier: 2.25, effectPerLevel: 75, effectLabel: "+75/клик" },
+        { id: "raggedCup", title: "Рваный стаканчик", description: "Базовая прокачка клика", baseCost: 50, costMultiplier: 1.95, effectPerLevel: 1, effectLabel: "+1/клик" },
+        { id: "ceoSign", title: "Табличка CEO", description: "Прохожие верят в стартап", baseCost: 420, costMultiplier: 2.05, effectPerLevel: 5, effectLabel: "+5/клик" },
+        { id: "districtCharisma", title: "Харизма района", description: "Каждый клик становится весомее", baseCost: 2_400, costMultiplier: 2.15, effectPerLevel: 18, effectLabel: "+18/клик" },
+        { id: "successCourse", title: "Курсы успеха", description: "Инфобизнес работает на тебя", baseCost: 18_000, costMultiplier: 2.25, effectPerLevel: 75, effectLabel: "+75/клик" },
         { id: "investorPitch", title: "Питч инвестору", description: "Каждый тап звучит дорого", baseCost: 95_000, costMultiplier: 2.35, effectPerLevel: 320, effectLabel: "+320/клик" },
       ];
 
       const businessUpgrades = [
-        { id: "shawarmaPoint", title: "Шаурма-точка", description: "Первый пассивный доход", baseCost: 180, costMultiplier: 1.95, effectPerLevel: 3, effectLabel: "+3/сек" },
-        { id: "metroKiosk", title: "Ларёк у метро", description: "Деньги капают быстрее", baseCost: 1_600, costMultiplier: 2.08, effectPerLevel: 18, effectLabel: "+18/сек" },
+        { id: "shawarmaPoint", title: "Шаурма-точка", description: "Первый пассивный доход", baseCost: 260, costMultiplier: 1.95, effectPerLevel: 3, effectLabel: "+3/сек" },
+        { id: "metroKiosk", title: "Ларёк у метро", description: "Деньги капают быстрее", baseCost: 2_200, costMultiplier: 2.08, effectPerLevel: 18, effectLabel: "+18/сек" },
         { id: "miniBusiness", title: "Мини-бизнес", description: "Район начинает работать", baseCost: 14_000, costMultiplier: 2.16, effectPerLevel: 95, effectLabel: "+95/сек" },
         { id: "shawarmaNetwork", title: "Сеть шаурмы", description: "Почти империя", baseCost: 110_000, costMultiplier: 2.28, effectPerLevel: 520, effectLabel: "+520/сек" },
         { id: "districtEmpire", title: "Районная империя", description: "Дворовая экономика под контролем", baseCost: 850_000, costMultiplier: 2.4, effectPerLevel: 3_000, effectLabel: "+3000/сек" },
@@ -384,14 +640,14 @@
       let state = loadGame();
 
       const quests = [
-        { id: "click250", title: "Разогреть палец", description: "Сделай 250 кликов", target: 250, reward: 900, getProgress: () => state.stats.clickCount },
-        { id: "click1000", title: "Кликер района", description: "Сделай 1 000 кликов", target: 1_000, reward: 5_000, getProgress: () => state.stats.clickCount },
-        { id: "earn10000", title: "Первые серьёзные деньги", description: "Заработай всего 10 000 ₽", target: 10_000, reward: 7_500, getProgress: () => state.totalEarned },
-        { id: "clickUpgrades10", title: "Прокачать харизму", description: "Купи 10 апгрейдов клика", target: 10, reward: 8_000, getProgress: () => getTotalUpgradeLevel(clickUpgrades) },
-        { id: "businessUpgrades8", title: "Бизнес пахнет шаурмой", description: "Купи 8 бизнес-апгрейдов", target: 8, reward: 12_000, getProgress: () => getTotalUpgradeLevel(businessUpgrades) },
-        { id: "daily3", title: "Возвращайся в район", description: "Забери ежедневный бонус 3 раза", target: 3, reward: 35_000, getProgress: () => state.stats.dailyClaimCount },
-        { id: "share3", title: "Позови банду", description: "Позови друга 3 раза", target: 3, reward: 10_000, getProgress: () => state.stats.shareCount },
-        { id: "rankBusinessman", title: "Стать бизнесменом", description: "Достигни 25 000 ₽ общего заработка", target: 25_000, reward: 25_000, getProgress: () => state.totalEarned },
+        { id: "click250", title: "Разогреть палец", description: "Сделай 250 кликов", target: 250, reward: 750, getProgress: () => state.stats.clickCount },
+        { id: "click1000", title: "Кликер района", description: "Сделай 1 000 кликов", target: 1_000, reward: 3_500, getProgress: () => state.stats.clickCount },
+        { id: "earn10000", title: "Первые серьёзные деньги", description: "Заработай всего 10 000 ₽", target: 10_000, reward: 4_500, getProgress: () => state.totalEarned },
+        { id: "clickUpgrades10", title: "Прокачать харизму", description: "Купи 10 апгрейдов клика", target: 10, reward: 6_000, getProgress: () => getTotalUpgradeLevel(clickUpgrades) },
+        { id: "businessUpgrades8", title: "Бизнес пахнет шаурмой", description: "Купи 8 бизнес-апгрейдов", target: 8, reward: 9_000, getProgress: () => getTotalUpgradeLevel(businessUpgrades) },
+        { id: "daily3", title: "Возвращайся в район", description: "Забери ежедневный бонус 3 раза", target: 3, reward: 15_000, getProgress: () => state.stats.dailyClaimCount },
+        { id: "share3", title: "Позови банду", description: "Позови друга 3 раза", target: 3, reward: 8_000, getProgress: () => state.stats.shareCount },
+        { id: "rankBusinessman", title: "Стать бизнесменом", description: "Достигни 25 000 ₽ общего заработка", target: 25_000, reward: 12_000, getProgress: () => state.totalEarned },
       ];
 
       const moneyEl = document.getElementById("money");
@@ -406,6 +662,10 @@
       const nextGoalText = document.getElementById("nextGoalText");
       const boostButton = document.getElementById("boostButton");
       const dailyButton = document.getElementById("dailyButton");
+      const dailyTitle = document.getElementById("dailyTitle");
+      const dailyRewardText = document.getElementById("dailyRewardText");
+      const dailyDayPill = document.getElementById("dailyDayPill");
+      const dailyDots = document.getElementById("dailyDots");
       const shareButton = document.getElementById("shareButton");
       const resetButton = document.getElementById("resetButton");
       const clickShop = document.getElementById("clickShop");
@@ -413,11 +673,25 @@
       const questsList = document.getElementById("questsList");
       const activeQuestsList = document.getElementById("activeQuestsList");
       const mainSummary = document.getElementById("mainSummary");
+      const districtEmoji = document.getElementById("districtEmoji");
+      const districtTitle = document.getElementById("districtTitle");
+      const districtDesc = document.getElementById("districtDesc");
+      const districtClickLevels = document.getElementById("districtClickLevels");
+      const districtBusinessLevels = document.getElementById("districtBusinessLevels");
+      const districtProgressText = document.getElementById("districtProgressText");
+      const districtProgressBar = document.getElementById("districtProgressBar");
       const clickSummary = document.getElementById("clickSummary");
       const businessSummary = document.getElementById("businessSummary");
       const questsSummary = document.getElementById("questsSummary");
       const tabButtons = document.querySelectorAll(".tabBtn");
       const panels = document.querySelectorAll(".panel");
+      const onboardingOverlay = document.getElementById("onboardingOverlay");
+      const onboardingIcon = document.getElementById("onboardingIcon");
+      const onboardingTitle = document.getElementById("onboardingTitle");
+      const onboardingText = document.getElementById("onboardingText");
+      const onboardingProgress = document.getElementById("onboardingProgress");
+      const onboardingSkip = document.getElementById("onboardingSkip");
+      const onboardingNext = document.getElementById("onboardingNext");
 
       const telegramUser = tg?.initDataUnsafe?.user;
       if (telegramUser?.first_name) {
@@ -472,6 +746,38 @@
         return String(Math.floor(value)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
       }
 
+      function getDayKey(time = Date.now()) {
+        const date = new Date(time);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      }
+
+      function getDayDiff(fromKey, toKey = getDayKey()) {
+        if (!fromKey) return null;
+        const from = new Date(`${fromKey}T00:00:00`);
+        const to = new Date(`${toKey}T00:00:00`);
+        return Math.round((to - from) / 86_400_000);
+      }
+
+      function getNextDailyDay() {
+        const today = getDayKey();
+        const diff = getDayDiff(state.dailyLastClaimDate, today);
+
+        if (state.dailyLastClaimDate === today) return Math.max(1, state.dailyStreakDay || 1);
+        if (diff === 1) return Math.min(7, (state.dailyStreakDay || 0) + 1);
+        if (diff === null) return 1;
+        return 1;
+      }
+
+      function getDailyReward() {
+        const day = getNextDailyDay();
+        return dailyRewards[day - 1] || dailyRewards[0];
+      }
+
+      function activateBoost(seconds) {
+        state.boostActive = true;
+        state.boostEndTime = Math.max(Date.now(), state.boostEndTime || 0) + seconds * 1000;
+      }
+
       function getUpgradeLevel(upgradeId) { return state.upgrades[upgradeId] || 0; }
       function getUpgradeCost(upgrade) { return Math.floor(upgrade.baseCost * upgrade.costMultiplier ** getUpgradeLevel(upgrade.id)); }
       function getTotalUpgradeLevel(upgrades) { return upgrades.reduce((sum, upgrade) => sum + getUpgradeLevel(upgrade.id), 0); }
@@ -506,6 +812,40 @@
         const progress = ((state.totalEarned - currentNeed) / (nextRank.need - currentNeed)) * 100;
         progressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
         progressText.textContent = `До “${nextRank.title}”: ${formatMoney(nextRank.need - state.totalEarned)}`;
+      }
+
+      function getCurrentDistrictStage() {
+        let currentStage = districtStages[0];
+        for (const stage of districtStages) if (state.totalEarned >= stage.need) currentStage = stage;
+        return currentStage;
+      }
+
+      function getNextDistrictStage() {
+        return districtStages.find((stage) => state.totalEarned < stage.need) || null;
+      }
+
+      function updateDistrictUI() {
+        const currentStage = getCurrentDistrictStage();
+        const nextStage = getNextDistrictStage();
+        const clickLevels = getTotalUpgradeLevel(clickUpgrades);
+        const businessLevels = getTotalUpgradeLevel(businessUpgrades);
+
+        districtEmoji.textContent = currentStage.icon;
+        districtTitle.textContent = currentStage.title;
+        districtDesc.textContent = currentStage.description;
+        districtClickLevels.textContent = `${clickLevels} ур.`;
+        districtBusinessLevels.textContent = `${businessLevels} ур.`;
+
+        if (!nextStage) {
+          districtProgressText.textContent = "Район полностью прокачан";
+          districtProgressBar.style.width = "100%";
+          return;
+        }
+
+        const currentNeed = currentStage.need;
+        const progress = ((state.totalEarned - currentNeed) / (nextStage.need - currentNeed)) * 100;
+        districtProgressText.textContent = `До “${nextStage.title}”: ${formatMoney(nextStage.need - state.totalEarned)}`;
+        districtProgressBar.style.width = `${Math.max(0, Math.min(100, progress))}%`;
       }
 
       function applyOfflineProgress() {
@@ -737,6 +1077,47 @@
         questsSummary.textContent = ready > 0 ? `${ready} забрать` : `${completed}/${quests.length}`;
       }
 
+
+      function updateDailyUI(dailyReady, reward) {
+        const currentDay = reward.day;
+        dailyTitle.textContent = dailyReady ? `Ежедневная серия: день ${currentDay}` : `Серия сохранена: день ${state.dailyStreakDay || currentDay}`;
+        dailyRewardText.textContent = dailyReady ? `Сегодня: ${reward.label}` : "Сегодняшняя награда уже забрана";
+        dailyDayPill.textContent = `День ${currentDay}/7`;
+
+        dailyDots.innerHTML = "";
+        for (let index = 1; index <= 7; index += 1) {
+          const dot = document.createElement("div");
+          dot.className = "dailyDot";
+          if (index < currentDay || (!dailyReady && index <= state.dailyStreakDay)) dot.classList.add("done");
+          if (index === currentDay && dailyReady) dot.classList.add("active");
+          dailyDots.appendChild(dot);
+        }
+      }
+
+      function showOnboardingStep() {
+        const stepIndex = Math.max(0, Math.min(state.onboardingStep || 0, onboardingSteps.length - 1));
+        const step = onboardingSteps[stepIndex];
+        onboardingIcon.textContent = step.icon;
+        onboardingTitle.textContent = step.title;
+        onboardingText.textContent = step.text;
+        onboardingNext.textContent = stepIndex === onboardingSteps.length - 1 ? "Начать играть" : "Дальше";
+        onboardingProgress.innerHTML = onboardingSteps
+          .map((_, index) => `<span class="${index <= stepIndex ? "active" : ""}"></span>`)
+          .join("");
+      }
+
+      function openOnboardingIfNeeded() {
+        if (state.onboardingDone) return;
+        showOnboardingStep();
+        onboardingOverlay.classList.add("visible");
+      }
+
+      function closeOnboarding() {
+        state.onboardingDone = true;
+        onboardingOverlay.classList.remove("visible");
+        saveGame();
+      }
+
       function updateUI() {
         const boost = getBoostMultiplier();
         const perClick = getPerClick();
@@ -747,12 +1128,15 @@
         boostButton.textContent = state.boostActive ? "Буст активен" : "Буст x2 — 1 500 ₽";
         boostButton.disabled = state.money < 1_500 || state.boostActive;
 
-        const oneDay = 24 * 60 * 60 * 1000;
-        const dailyReady = Date.now() - state.dailyBonusLastClaim >= oneDay;
-        dailyButton.textContent = dailyReady ? "Ежедневный бонус" : "Бонус забран";
+        const today = getDayKey();
+        const dailyReady = state.dailyLastClaimDate !== today;
+        const dailyReward = getDailyReward();
+        dailyButton.textContent = dailyReady ? `День ${dailyReward.day} — забрать` : "Бонус забран";
         dailyButton.disabled = !dailyReady;
+        updateDailyUI(dailyReady, dailyReward);
 
         updateRankUI();
+        updateDistrictUI();
         updateShopUI();
         updateQuestsUI();
         updateActiveQuests();
@@ -780,22 +1164,28 @@
       boostButton.addEventListener("click", () => {
         if (state.money < 1_500 || state.boostActive) return;
         spendMoney(1_500);
-        state.boostActive = true;
-        state.boostEndTime = Date.now() + 30_000;
+        activateBoost(30);
         showFloatingText("Мем-буст активирован: доход x2 на 30 секунд!");
         updateUI();
       });
 
       dailyButton.addEventListener("click", () => {
-        const oneDay = 24 * 60 * 60 * 1000;
-        if (Date.now() - state.dailyBonusLastClaim < oneDay) return;
+        const today = getDayKey();
+        if (state.dailyLastClaimDate === today) return;
 
-        const bonus = 1_500 + getTotalUpgradeLevel(clickUpgrades) * 150 + getTotalUpgradeLevel(businessUpgrades) * 250;
-        addMoney(bonus);
+        const diff = getDayDiff(state.dailyLastClaimDate, today);
+        if (diff === 1) state.dailyStreakDay = Math.min(7, (state.dailyStreakDay || 0) + 1);
+        else state.dailyStreakDay = 1;
+
+        const reward = dailyRewards[state.dailyStreakDay - 1] || dailyRewards[0];
+        addMoney(reward.money);
+        if (reward.boostSeconds) activateBoost(reward.boostSeconds);
+
+        state.dailyLastClaimDate = today;
         state.dailyBonusLastClaim = Date.now();
         state.stats.dailyClaimCount += 1;
         tg?.HapticFeedback?.notificationOccurred?.("success");
-        showFloatingText(`Ежедневный бонус: +${formatMoney(bonus)}`);
+        showFloatingText(`День ${state.dailyStreakDay}: +${formatMoney(reward.money)}${reward.boostSeconds ? " и буст" : ""}`);
         updateUI();
       });
 
@@ -817,7 +1207,21 @@
         saveGame();
         renderQuests();
         updateUI();
+        openOnboardingIfNeeded();
       });
+
+      onboardingNext.addEventListener("click", () => {
+        const nextStep = (state.onboardingStep || 0) + 1;
+        if (nextStep >= onboardingSteps.length) {
+          closeOnboarding();
+          return;
+        }
+        state.onboardingStep = nextStep;
+        showOnboardingStep();
+        saveGame();
+      });
+
+      onboardingSkip.addEventListener("click", closeOnboarding);
 
       setInterval(() => {
         const passiveGain = getPerSecond() * getBoostMultiplier();
@@ -846,6 +1250,7 @@
       renderQuests();
       applyOfflineProgress();
       updateUI();
+      openOnboardingIfNeeded();
     </script>
   </body>
 </html>
