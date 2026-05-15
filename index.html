@@ -136,6 +136,63 @@
         opacity: 0.75;
         margin-bottom: 12px;
       }
+
+      .panelTitle {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+
+      .questsPanel {
+        text-align: left;
+      }
+
+      .questItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .questItem:last-child {
+        border-bottom: none;
+      }
+
+      .questTitle {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .questProgress {
+        margin-top: 4px;
+        font-size: 12px;
+        opacity: 0.72;
+      }
+
+      .questReward {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #ffcc4d;
+      }
+
+      .questBtn {
+        min-width: 92px;
+        border: none;
+        border-radius: 12px;
+        padding: 9px 10px;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #ffcc4d;
+        color: #1c1c1c;
+      }
+
+      .questBtn:disabled {
+        background: #555;
+        color: #aaa;
+        cursor: not-allowed;
+      }
     </style>
   </head>
 
@@ -160,6 +217,11 @@
 
       <div class="event" id="eventText"></div>
 
+      <div class="panel questsPanel">
+        <h2 class="panelTitle">Задания района</h2>
+        <div class="questsList" id="questsList"></div>
+      </div>
+
       <div class="panel">
         <button class="btn" id="upgradeClick">
           Купить “Рваный стаканчик” — 25 ₽
@@ -180,7 +242,7 @@
         <button class="btn" id="resetButton">Сбросить прогресс</button>
 
         <p class="small">
-          Район ждёт легенду. Дальше будут задания, рейтинг и кланы.
+          Район ждёт легенду. Выполняй задания, расти и готовься к рейтингу.
         </p>
       </div>
     </div>
@@ -204,6 +266,10 @@
       const defaultState = {
         money: 0,
         totalEarned: 0,
+        totalClicks: 0,
+        dailyBonusClaims: 0,
+        sharesCount: 0,
+        claimedQuests: [],
         perClick: 1,
         perSecond: 0,
         clickUpgradeLevel: 0,
@@ -231,11 +297,50 @@
         { title: "Олигарх района", need: 50_000 },
         { title: "Легенда района", need: 250_000 },
       ];
+
+      const quests = [
+        {
+          id: "click_50",
+          title: "Сделать 50 кликов",
+          type: "clicks",
+          target: 50,
+          reward: 150,
+        },
+        {
+          id: "click_upgrade_3",
+          title: "Купить 3 улучшения клика",
+          type: "clickUpgrades",
+          target: 3,
+          reward: 300,
+        },
+        {
+          id: "auto_upgrade_2",
+          title: "Купить 2 шаурма-точки",
+          type: "autoUpgrades",
+          target: 2,
+          reward: 450,
+        },
+        {
+          id: "daily_1",
+          title: "Забрать ежедневный бонус",
+          type: "dailyClaims",
+          target: 1,
+          reward: 250,
+        },
+        {
+          id: "share_1",
+          title: "Позвать друга",
+          type: "shares",
+          target: 1,
+          reward: 500,
+        },
+      ];
       const moneyEl = document.getElementById("money");
       const incomeEl = document.getElementById("income");
       const rankText = document.getElementById("rankText");
       const progressBar = document.getElementById("progressBar");
       const progressText = document.getElementById("progressText");
+      const questsList = document.getElementById("questsList");
       const clickButton = document.getElementById("clickButton");
       const upgradeClick = document.getElementById("upgradeClick");
       const upgradeAuto = document.getElementById("upgradeAuto");
@@ -319,6 +424,89 @@
         )}`;
       }
 
+      function getQuestProgress(quest) {
+        if (quest.type === "clicks") return state.totalClicks;
+        if (quest.type === "clickUpgrades") return state.clickUpgradeLevel;
+        if (quest.type === "autoUpgrades") return state.autoUpgradeLevel;
+        if (quest.type === "dailyClaims") return state.dailyBonusClaims;
+        if (quest.type === "shares") return state.sharesCount;
+
+        return 0;
+      }
+
+      function isQuestClaimed(questId) {
+        return state.claimedQuests.includes(questId);
+      }
+
+      function claimQuestReward(questId) {
+        const quest = quests.find((item) => item.id === questId);
+
+        if (!quest || isQuestClaimed(quest.id)) return;
+
+        const progress = getQuestProgress(quest);
+
+        if (progress < quest.target) return;
+
+        state.money += quest.reward;
+        state.totalEarned += quest.reward;
+        state.claimedQuests.push(quest.id);
+
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+
+        showFloatingText(`Задание выполнено: +${formatMoney(quest.reward)}`);
+        updateUI();
+      }
+
+      function updateQuestsUI() {
+        questsList.innerHTML = "";
+
+        for (const quest of quests) {
+          const progress = Math.min(getQuestProgress(quest), quest.target);
+          const claimed = isQuestClaimed(quest.id);
+          const completed = progress >= quest.target;
+
+          const questItem = document.createElement("div");
+          questItem.className = "questItem";
+
+          const questInfo = document.createElement("div");
+
+          const questTitle = document.createElement("div");
+          questTitle.className = "questTitle";
+          questTitle.textContent = quest.title;
+
+          const questProgress = document.createElement("div");
+          questProgress.className = "questProgress";
+          questProgress.textContent = `Прогресс: ${progress}/${quest.target}`;
+
+          const questReward = document.createElement("div");
+          questReward.className = "questReward";
+          questReward.textContent = `Награда: ${formatMoney(quest.reward)}`;
+
+          questInfo.appendChild(questTitle);
+          questInfo.appendChild(questProgress);
+          questInfo.appendChild(questReward);
+
+          const questButton = document.createElement("button");
+          questButton.className = "questBtn";
+
+          if (claimed) {
+            questButton.textContent = "Забрано";
+            questButton.disabled = true;
+          } else if (completed) {
+            questButton.textContent = "Забрать";
+            questButton.disabled = false;
+            questButton.addEventListener("click", () => claimQuestReward(quest.id));
+          } else {
+            questButton.textContent = "В процессе";
+            questButton.disabled = true;
+          }
+
+          questItem.appendChild(questInfo);
+          questItem.appendChild(questButton);
+          questsList.appendChild(questItem);
+        }
+      }
+
       function applyOfflineProgress() {
         const now = Date.now();
         const awaySeconds = Math.floor((now - state.lastSaveTime) / 1000);
@@ -380,6 +568,7 @@
         dailyButton.textContent = dailyReady
           ? "Забрать ежедневный бонус"
           : "Ежедневный бонус уже забран";
+        updateQuestsUI();
         updateRankUI();
         saveGame();
       }
@@ -397,6 +586,7 @@
         tg?.HapticFeedback?.impactOccurred?.("light");
 
         const gain = state.perClick * getBoostMultiplier();
+        state.totalClicks += 1;
         state.money += gain;
         state.totalEarned += gain;
 
@@ -451,6 +641,8 @@
           500 + state.clickUpgradeLevel * 50 + state.autoUpgradeLevel * 100;
 
         state.money += bonus;
+        state.totalEarned += bonus;
+        state.dailyBonusClaims += 1;
         state.dailyBonusLastClaim = now;
 
         tg?.HapticFeedback?.notificationOccurred?.("success");
@@ -460,6 +652,9 @@
       });
 
       shareButton.addEventListener("click", () => {
+        state.sharesCount += 1;
+        updateUI();
+
         const text = encodeURIComponent(
           `Я уже строю империю в “Бомжара CEO” 🥴\nСможешь обогнать меня?`,
         );
